@@ -5,7 +5,7 @@
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine_Learning-F7931E.svg)](https://scikit-learn.org/)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Transformers-yellow.svg)](https://huggingface.co/w11wo/indonesian-roberta-base-sentiment-classifier)
 
-Repositori ini berisi *source code* aplikasi penelitian skripsi yang berfokus pada **Analisis Sentimen Berbasis Aspek (ABSA)** terhadap opini publik terkait **Program Makan Bergizi Gratis (MBG)**. 
+Repositori ini berisi *source code* aplikasi penelitian yang berfokus pada **Analisis Sentimen Berbasis Aspek (ABSA)** terhadap opini publik terkait **Program Makan Bergizi Gratis (MBG)**. 
 
 Penelitian ini membandingkan kinerja dua algoritma *Machine Learning*, yaitu **Multinomial Naïve Bayes** dan **Linear Support Vector Classifier (LinearSVC)**, dengan menerapkan teknik unik berupa **segmentasi kalimat berbasis konjungsi** untuk memisahkan opini majemuk sebelum klasifikasi.
 
@@ -38,7 +38,7 @@ analisis-sentimen-MBG/
 │   ├── preprocessing.py          # Cleaning, normalisasi, segmentasi, stemming
 │   ├── resources.py              # Cache loader Sastrawi, stopwords, & RoBERTa
 │   └── model_utils.py            # Loader & auto-downloader model ML
-├── app_pipeline.py               # Aplikasi Pipeline Skripsi Lengkap (6 Tab)
+├── app_pipeline.py               # Aplikasi Pipeline Lengkap (6 Tab)
 ├── app_demo.py                   # Aplikasi Pengujian Real-Time (Siap Deploy)
 ├── requirements.txt              # Dependency ringan (untuk Streamlit Cloud)
 ├── requirements-full.txt         # Dependency lengkap (untuk pipeline lokal)
@@ -71,7 +71,7 @@ source venv/bin/activate
   pip install -r requirements.txt
   ```
 
-* **Untuk Pipeline Skripsi Lengkap (`app_pipeline.py` termasuk RoBERTa):**
+* **Untuk Pipeline Lengkap (`app_pipeline.py` termasuk RoBERTa):**
   ```cmd
   pip install -r requirements-full.txt
   ```
