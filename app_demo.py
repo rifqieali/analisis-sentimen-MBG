@@ -9,7 +9,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from wordcloud import WordCloud
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 
 from src.resources import load_nlp_resources, load_normalization_dict
@@ -223,7 +222,7 @@ else:
     """, unsafe_allow_html=True)
 
     # Tabs Hasil Analisis
-    tab_table, tab_charts, tab_eval = st.tabs(["📋 Tabel Hasil Analisis", "📊 Visualisasi & WordCloud", "🎯 Evaluasi Akurasi"])
+    tab_table, tab_charts, tab_eval = st.tabs(["📋 Tabel Hasil Analisis", "📊 Visualisasi", "🎯 Evaluasi Akurasi"])
 
     with tab_table:
         st.subheader("📋 Detail Segmentasi Kalimat & Prediksi Sentimen-Aspek")
