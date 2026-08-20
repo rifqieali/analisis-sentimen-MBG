@@ -83,7 +83,7 @@ source venv/bin/activate
   streamlit run app_demo.py
   ```
 
-* **Menjalankan Pipeline Lengkap Skripsi:**
+* **Menjalankan Pipeline Lengkap:**
   ```cmd
   streamlit run app_pipeline.py
   ```
