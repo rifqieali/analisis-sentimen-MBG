@@ -1,0 +1,34 @@
+# Python venv & environment
+venv/
+Lib/
+Include/
+Scripts/
+share/
+etc/
+pyvenv.cfg
+.env
+
+# Model Machine Learning & Safetensors Besar (>100MB)
+roberta_sentiment_local/
+*.safetensors
+*.h5
+*.pt
+*.bin
+*.joblib
+
+# Cache & Build files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
