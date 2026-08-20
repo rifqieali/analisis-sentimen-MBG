@@ -4,10 +4,29 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B.svg)](https://streamlit.io/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Machine_Learning-F7931E.svg)](https://scikit-learn.org/)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Transformers-yellow.svg)](https://huggingface.co/w11wo/indonesian-roberta-base-sentiment-classifier)
+[![HKI / HAKI Registered](https://img.shields.io/badge/HAKI-Surat_Pencatatan_Ciptaan-green.svg)](#-hak-kekayaan-intelektual-hki--haki)
 
 Repositori ini berisi *source code* aplikasi penelitian yang berfokus pada **Analisis Sentimen Berbasis Aspek (ABSA)** terhadap opini publik terkait **Program Makan Bergizi Gratis (MBG)**. 
 
 Penelitian ini membandingkan kinerja dua algoritma *Machine Learning*, yaitu **Multinomial Naïve Bayes** dan **Linear Support Vector Classifier (LinearSVC)**, dengan menerapkan teknik unik berupa **segmentasi kalimat berbasis konjungsi** untuk memisahkan opini majemuk sebelum klasifikasi.
+
+---
+
+## 📜 Hak Kekayaan Intelektual (HKI / HAKI)
+
+Program komputer ini telah terdaftar dan dilindungi secara hukum berdasarkan **Surat Pencatatan Ciptaan** dari **Kementerian Hukum Republik Indonesia (Direktorat Jenderal Kekayaan Intelektual)**:
+
+> **Nomor Pencatatan:** `001265752` | **Nomor Permohonan:** `EC002026079870` (5 Juni 2026)
+
+| Parameter | Keterangan |
+|---|---|
+| **Judul Ciptaan** | Analisis Sentimen Berbasis Aspek terhadap Program Makan Bergizi Gratis |
+| **Jenis Ciptaan** | Program Komputer |
+| **Nomor Pencatatan** | `001265752` |
+| **Tanggal Pertama Kali Diumumkan** | 13 Mei 2026 (Kota Semarang) |
+| **Pemegang Hak Cipta** | Universitas Negeri Semarang |
+| **Pencipta** | 1. **Rifqie Alimul Haq**<br>2. **Dr. Nur Iksan, S.T., M.Kom.**<br>3. **Dr. Djuniadi, M.T.** |
+| **Masa Pelindungan** | Berlaku selama 50 (lima puluh) tahun sejak ciptaan pertama kali diumumkan. |
 
 ---
 
@@ -102,6 +121,6 @@ source venv/bin/activate
 
 ## 📄 Lisensi & Kredit
 
-Penelitian Skripsi oleh **Rifqie Ali**.  
+Penelitian & Pengembangan oleh **Rifqie Alimul Haq**, **Dr. Nur Iksan, S.T., M.Kom.**, dan **Dr. Djuniadi, M.T.** (Universitas Negeri Semarang).  
 Model Transformer: [w11wo/indonesian-roberta-base-sentiment-classifier](https://huggingface.co/w11wo/indonesian-roberta-base-sentiment-classifier)  
 Library NLP Bahasa Indonesia: [Sastrawi Stemmer](https://github.com/sastrawi/sastrawi) & [InSet Lexicon](https://github.com/fajri91/InSet)
