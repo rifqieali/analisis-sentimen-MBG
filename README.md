@@ -56,11 +56,12 @@ analisis-sentimen-MBG/
 │   ├── constants.py              # Dictionary aspek, konjungsi, dan konstanta
 │   ├── preprocessing.py          # Cleaning, normalisasi, segmentasi, stemming
 │   ├── resources.py              # Cache loader Sastrawi, stopwords, & RoBERTa
-│   └── model_utils.py            # Loader & auto-downloader model ML
-├── app_pipeline.py               # Aplikasi Pipeline Lengkap (6 Tab)
+│   ├── model_utils.py            # Loader & auto-downloader model ML
+│   └── ui.py                     # Desain UI premium & styling komponen
+├── app_pipeline.py               # Aplikasi Pipeline Lengkap (6 Tab - Utama)
 ├── app_demo.py                   # Aplikasi Pengujian Real-Time (Siap Deploy)
-├── requirements.txt              # Dependency ringan (untuk Streamlit Cloud)
 ├── requirements-full.txt         # Dependency lengkap (untuk pipeline lokal)
+├── requirements.txt              # Dependency ringan (untuk Streamlit Cloud)
 └── README.md                     # Dokumentasi proyek
 ```
 
@@ -85,26 +86,26 @@ source venv/bin/activate
 
 ### 3. Instal Dependensi
 
-* **Untuk Pengujian Demo Real-Time (`app_demo.py`):**
-  ```cmd
-  pip install -r requirements.txt
-  ```
-
 * **Untuk Pipeline Lengkap (`app_pipeline.py` termasuk RoBERTa):**
   ```cmd
   pip install -r requirements-full.txt
   ```
 
+* **Untuk Pengujian Demo Real-Time (`app_demo.py`):**
+  ```cmd
+  pip install -r requirements.txt
+  ```
+
 ### 4. Jalankan Aplikasi
+
+* **Menjalankan Pipeline Lengkap (Utama):**
+  ```cmd
+  streamlit run app_pipeline.py
+  ```
 
 * **Menjalankan Demo Real-Time:**
   ```cmd
   streamlit run app_demo.py
-  ```
-
-* **Menjalankan Pipeline Lengkap:**
-  ```cmd
-  streamlit run app_pipeline.py
   ```
 
 ---
