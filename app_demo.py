@@ -19,7 +19,6 @@ warnings.filterwarnings('ignore')
 
 st.set_page_config(
     page_title="Analisis Sentimen MBG - Realtime Demo",
-    page_icon="🍽️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -34,7 +33,7 @@ model_data = load_saved_model()
 
 # Header Hero Banner
 render_hero_banner(
-    title="🍽️ Analisis Sentimen Program Makan Bergizi Gratis (MBG)",
+    title="Analisis Sentimen Program Makan Bergizi Gratis (MBG)",
     subtitle="Pengujian Real-Time Aspect-Based Sentiment Analysis (ABSA) Menggunakan Machine Learning (Multinomial Naïve Bayes vs LinearSVC)",
     is_demo=True
 )
@@ -55,10 +54,10 @@ classes = nb_model.classes_
 
 # Model Metadata Card
 st.markdown(f"""
-<div style="background: var(--secondary-background-color); border: 1px solid rgba(128,128,128,0.2); border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
-    <div><span style="opacity: 0.7; font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Model Aktif</span><br><b style="font-size: 0.95rem;">MultinomialNB & LinearSVC</b></div>
-    <div style="border-left: 1px solid rgba(128,128,128,0.2); padding-left: 20px;"><span style="opacity: 0.7; font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">TF-IDF Vocabulary</span><br><b style="font-size: 0.95rem; color: #6366F1;">{vocab_size:,} Fitur</b></div>
-    <div style="border-left: 1px solid rgba(128,128,128,0.2); padding-left: 20px;"><span style="opacity: 0.7; font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Kelas Prediksi</span><br><b style="font-size: 0.95rem; color: #10B981;">{' · '.join(classes)}</b></div>
+<div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 14px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
+    <div><span style="color: #71717A; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Model Aktif</span><br><b style="font-size: 0.95rem; color: #18181B;">MultinomialNB & LinearSVC</b></div>
+    <div style="border-left: 1px solid #E4E4E7; padding-left: 20px;"><span style="color: #71717A; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">TF-IDF Vocabulary</span><br><b style="font-size: 0.95rem; color: #334155;">{vocab_size:,} Fitur</b></div>
+    <div style="border-left: 1px solid #E4E4E7; padding-left: 20px;"><span style="color: #71717A; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Kelas Prediksi</span><br><b style="font-size: 0.95rem; color: #2D6A4F;">{' · '.join(classes)}</b></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -75,24 +74,24 @@ for key, default in [
 if not st.session_state['rt_analyzed']:
     mode = st.radio(
         "Pilih Mode Input Pengujian:",
-        ("✏️ Input Manual (Paste Teks)", "📄 Upload CSV File"),
+        ("Input Manual (Paste Teks)", "Upload File CSV"),
         horizontal=True
     )
     st.markdown("<br>", unsafe_allow_html=True)
 
     if "Manual" in mode:
-        st.info("💡 **Panduan Input:** Masukkan satu kalimat per baris. Untuk menguji akurasi otomatis, tambahkan label di akhir kalimat dengan separator `|` (contoh: `menu MBG sangat lezat dan bergizi | Positif`).")
+        st.info("**Panduan Input:** Masukkan satu kalimat per baris. Untuk menguji akurasi otomatis, tambahkan label di akhir kalimat dengan separator `|` (contoh: `menu MBG sangat lezat dan bergizi | Positif`).")
 
         raw = st.text_area(
             "Masukkan Kalimat Uji (Satu per Baris):",
-            height=220,
+            height=200,
             placeholder="makanan bergizi enak dan porsinya cukup untuk anak sekolah | Positif\ndistribusi makanan sering telat siswa menunggu berjam-jam | Negatif\ndana MBG dikorupsi dan dimarkup oknum tidak bertanggung jawab | Negatif\nmenu MBG lezat dan higienis sangat membantu gizi siswa | Positif",
             label_visibility="collapsed"
         )
 
         col_btn1, _ = st.columns([1, 3])
         with col_btn1:
-            run = st.button("🚀 Analisis Teks Real-Time", use_container_width=True)
+            run = st.button("Analisis Teks Real-Time", use_container_width=True)
 
         if run:
             if raw.strip():
@@ -114,10 +113,10 @@ if not st.session_state['rt_analyzed']:
                 })
                 st.rerun()
             else:
-                st.warning("⚠️ Teks pengujian tidak boleh kosong.")
+                st.warning("Teks pengujian tidak boleh kosong.")
 
     else:
-        st.info("📄 **Format File CSV:** Kolom wajib bernama `full_text`. Kolom opsional `label` (berisi 'Positif' atau 'Negatif') jika ingin menghitung evaluasi akurasi.")
+        st.info("**Format File CSV:** Kolom wajib bernama `full_text`. Kolom opsional `label` (berisi 'Positif' atau 'Negatif') jika ingin menghitung evaluasi akurasi.")
 
         template_df = pd.DataFrame({
             "full_text": [
@@ -132,7 +131,7 @@ if not st.session_state['rt_analyzed']:
         col_dl, col_up = st.columns([1, 2])
         with col_dl:
             st.download_button(
-                "📥 Download Template CSV",
+                "Download Template CSV",
                 data=template_df.to_csv(index=False).encode('utf-8'),
                 file_name="template_pengujian_mbg.csv",
                 mime="text/csv",
@@ -141,11 +140,11 @@ if not st.session_state['rt_analyzed']:
         with col_up:
             uploaded_test = st.file_uploader("Upload CSV Pengujian:", type="csv", label_visibility="collapsed")
 
-        if st.button("🚀 Analisis Seluruh Dataset CSV", use_container_width=True):
+        if st.button("Analisis Seluruh Dataset CSV", use_container_width=True):
             if uploaded_test:
                 df_csv = pd.read_csv(uploaded_test)
                 if 'full_text' not in df_csv.columns:
-                    st.error("❌ Kolom wajib 'full_text' tidak ditemukan dalam file CSV.")
+                    st.error("Kolom wajib 'full_text' tidak ditemukan dalam file CSV.")
                 else:
                     texts = df_csv['full_text'].dropna().astype(str).tolist()
                     labels = df_csv['label'].tolist() if 'label' in df_csv.columns else [None]*len(texts)
@@ -156,12 +155,12 @@ if not st.session_state['rt_analyzed']:
                     })
                     st.rerun()
             else:
-                st.warning("⚠️ Silakan unggah file CSV terlebih dahulu.")
+                st.warning("Silakan unggah file CSV terlebih dahulu.")
 
 else:
     col_ulang, _ = st.columns([1.5, 4.5])
     with col_ulang:
-        if st.button("🔄 Reset / Ulangi Pengujian", use_container_width=True):
+        if st.button("Reset / Ulangi Pengujian", use_container_width=True):
             st.session_state.update({
                 'rt_analyzed': False, 'rt_texts': [],
                 'rt_labels': [], 'rt_has_labels': False, 'df_results': None
@@ -181,7 +180,7 @@ else:
         df_res = st.session_state['df_results']
 
     if df_res.empty:
-        st.warning("⚠️ Tidak ada segmen opini valid yang terdeteksi.")
+        st.warning("Tidak ada segmen opini valid yang terdeteksi.")
         st.stop()
 
     total_seg = len(df_res)
@@ -222,39 +221,41 @@ else:
     """, unsafe_allow_html=True)
 
     # Tabs Hasil Analisis
-    tab_table, tab_charts, tab_eval = st.tabs(["📋 Tabel Hasil Analisis", "📊 Visualisasi", "🎯 Evaluasi Akurasi"])
+    tab_table, tab_charts, tab_eval = st.tabs(["Tabel Hasil Analisis", "Visualisasi & Distribusi", "Evaluasi Akurasi"])
 
     with tab_table:
-        st.subheader("📋 Detail Segmentasi Kalimat & Prediksi Sentimen-Aspek")
+        st.subheader("Detail Segmentasi Kalimat & Prediksi Sentimen-Aspek")
         st.dataframe(df_res, use_container_width=True, height=360)
 
     with tab_charts:
         c_chart1, c_chart2 = st.columns(2)
         with c_chart1:
-            st.markdown("##### 🥧 Perbandingan Distribusi Sentimen")
+            st.markdown("##### Perbandingan Distribusi Sentimen")
             fig_pie, axes = plt.subplots(1, 2, figsize=(8, 3.8))
             fig_pie.patch.set_alpha(0.0)
             
             for ax, col_pred, name in [(axes[0], 'Prediksi SVM', 'LinearSVC'), (axes[1], 'Prediksi NB', 'MultinomialNB')]:
                 counts = df_res[col_pred].value_counts()
-                colors = ['#10B981' if l == 'Positif' else '#EF4444' for l in counts.index]
-                ax.pie(counts.values, labels=counts.index, autopct='%1.1f%%', colors=colors, startangle=90, wedgeprops=dict(width=0.4, edgecolor='white'))
-                ax.set_title(name, fontsize=11, fontweight='bold')
+                colors = ['#2D6A4F' if l == 'Positif' else '#A63D40' for l in counts.index]
+                ax.pie(counts.values, labels=counts.index, autopct='%1.1f%%', colors=colors, startangle=90, wedgeprops=dict(width=0.45, edgecolor='#E4E4E7'))
+                ax.set_title(name, fontsize=11, fontweight='bold', color='#18181B')
             st.pyplot(fig_pie)
             plt.close(fig_pie)
 
         with c_chart2:
-            st.markdown("##### 📊 Distribusi Sentimen Per Aspek (LinearSVC)")
+            st.markdown("##### Distribusi Sentimen Per Aspek (LinearSVC)")
             df_asp = df_res[~df_res['Aspek'].str.contains('Lainnya', na=False)].copy()
             if not df_asp.empty:
                 pivot = df_asp.groupby(['Aspek', 'Prediksi SVM']).size().unstack(fill_value=0)
                 fig_bar, ax_bar = plt.subplots(figsize=(6, 3.8))
                 fig_bar.patch.set_alpha(0.0)
-                colors_bar = {'Positif': '#10B981', 'Negatif': '#EF4444'}
-                pivot.plot(kind='bar', ax=ax_bar, color=[colors_bar.get(c, '#6366F1') for c in pivot.columns], width=0.55)
-                ax_bar.set_title("Sentimen per Aspek", fontweight='bold', fontsize=11)
+                colors_bar = {'Positif': '#2D6A4F', 'Negatif': '#A63D40'}
+                pivot.plot(kind='bar', ax=ax_bar, color=[colors_bar.get(c, '#334155') for c in pivot.columns], width=0.55, edgecolor='none')
+                ax_bar.set_title("Sentimen per Aspek", fontweight='bold', fontsize=11, color='#18181B')
                 ax_bar.set_xlabel('')
                 ax_bar.set_ylabel('Jumlah Segmen')
+                ax_bar.spines['top'].set_visible(False)
+                ax_bar.spines['right'].set_visible(False)
                 plt.xticks(rotation=0)
                 st.pyplot(fig_bar)
                 plt.close(fig_bar)
@@ -263,7 +264,7 @@ else:
 
     with tab_eval:
         if has_labels and any(l is not None for l in labels):
-            st.subheader("🎯 Evaluasi Akurasi Pengujian Real-Time")
+            st.subheader("Evaluasi Akurasi Pengujian Real-Time")
 
             eval_data = []
             for i, text in enumerate(texts):
@@ -277,8 +278,8 @@ else:
                     'Label Sebenarnya': labels[i],
                     'Prediksi LinearSVC': ps,
                     'Prediksi NaiveBayes': pn,
-                    'Status LinearSVC': '✅ Benar' if ps == labels[i] else '❌ Salah',
-                    'Status NaiveBayes': '✅ Benar' if pn == labels[i] else '❌ Salah',
+                    'Status LinearSVC': 'Benar' if ps == labels[i] else 'Salah',
+                    'Status NaiveBayes': 'Benar' if pn == labels[i] else 'Salah',
                 })
 
             if eval_data:
@@ -297,11 +298,11 @@ else:
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.dataframe(df_eval, use_container_width=True)
         else:
-            st.info("💡 **Tips:** Untuk melihat evaluasi akurasi otomatis, berikan label pada kalimat uji dengan format `kalimat | Positif` atau upload file CSV dengan kolom `label`.")
+            st.info("**Tips:** Untuk melihat evaluasi akurasi otomatis, berikan label pada kalimat uji dengan format `kalimat | Positif` atau upload file CSV dengan kolom `label`.")
 
     st.divider()
     st.download_button(
-        "📥 Download Hasil Analisis Lengkap (CSV)",
+        "Download Hasil Analisis Lengkap (CSV)",
         data=df_res.to_csv(index=False).encode('utf-8'),
         file_name="hasil_analisis_realtime_mbg.csv",
         mime="text/csv"

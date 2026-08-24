@@ -1,5 +1,5 @@
 """
-Modul Desain UI & Estetika Premium untuk Streamlit
+Modul Desain UI & Estetika Minimalist (Clean Monochrome & Muted Pastels) untuk Streamlit
 """
 
 import streamlit as st
@@ -7,62 +7,53 @@ import matplotlib.pyplot as plt
 
 def inject_custom_css():
     """
-    Menyuntikkan CSS kustom dengan desain modern, mikro-animasi, glassmorphism,
-    dan tipografi premium (Plus Jakarta Sans & JetBrains Mono).
+    Menyuntikkan CSS kustom dengan desain Minimalist UI:
+    warm monochrome palette, flat bento grids, muted pastels, tipografi editorial,
+    tanpa gradient warna-warni dan tanpa drop shadow tebal.
     """
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #18181B;
     }
 
-    /* Main Container Padding */
+    /* Main Container */
     .block-container {
-        padding-top: 2rem;
+        padding-top: 1.75rem;
         padding-bottom: 3rem;
-        max-width: 1250px;
+        max-width: 1200px;
     }
 
-    /* Header Banner Premium */
+    /* Minimalist Hero Banner */
     .hero-banner {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.97) 0%, rgba(15, 23, 42, 0.98) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
-        padding: 32px 38px;
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 12px;
+        padding: 28px 32px;
         margin-bottom: 24px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-    }
-
-    .hero-banner::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #6366F1, #10B981, #F59E0B, #EC4899);
+        box-shadow: none;
     }
 
     .hero-title {
-        font-family: 'Outfit', sans-serif;
-        font-size: 2.1rem;
-        font-weight: 800;
-        color: #F8FAFC !important;
-        letter-spacing: -0.5px;
-        margin: 0 0 10px 0;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #18181B !important;
+        letter-spacing: -0.03em;
+        margin: 0 0 8px 0;
         line-height: 1.25;
     }
 
     .hero-subtitle {
-        font-size: 0.98rem;
-        color: #94A3B8;
+        font-size: 0.92rem;
+        color: #71717A;
         margin-bottom: 16px;
         line-height: 1.5;
     }
 
-    /* Badges */
+    /* Minimalist Badges */
     .badge-container {
         display: flex;
         flex-wrap: wrap;
@@ -74,147 +65,159 @@ def inject_custom_css():
     .badge-item {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 5px 12px;
-        border-radius: 50px;
-        font-size: 0.76rem;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
         font-weight: 600;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
-        backdrop-filter: blur(4px);
+        background: #F4F4F5;
+        color: #3F3F46;
+        border: 1px solid #E4E4E7;
     }
 
     .badge-haki {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34D399;
-        border: 1px solid rgba(52, 211, 153, 0.3);
+        background: #F0FDF4;
+        color: #166534;
+        border: 1px solid #DCFCE7;
     }
 
     .badge-unnes {
-        background: rgba(99, 102, 241, 0.15);
-        color: #818CF8;
-        border: 1px solid rgba(129, 140, 248, 0.3);
+        background: #F8FAFC;
+        color: #334155;
+        border: 1px solid #E2E8F0;
     }
 
     .badge-model {
-        background: rgba(245, 158, 11, 0.15);
-        color: #FBBF24;
-        border: 1px solid rgba(251, 191, 36, 0.3);
+        background: #F4F4F5;
+        color: #18181B;
+        border: 1px solid #E4E4E7;
     }
 
-    /* Metric Cards Grid */
+    /* Flat Bento Grid */
     .metric-grid-4 {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 14px;
-        margin: 18px 0 24px 0;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        margin: 16px 0 24px 0;
     }
 
     .metric-card-pro {
-        background: var(--secondary-background-color);
-        border: 1px solid rgba(128, 128, 128, 0.18);
-        border-radius: 14px;
-        padding: 18px 22px;
-        text-align: center;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
+        background: #FFFFFF;
+        border: 1px solid #E4E4E7;
+        border-radius: 10px;
+        padding: 16px 18px;
+        text-align: left;
+        box-shadow: none;
+        transition: border-color 0.15s ease;
     }
 
     .metric-card-pro:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
-        border-color: rgba(99, 102, 241, 0.4);
+        border-color: #A1A1AA;
     }
 
     .metric-num {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 1.75rem;
-        font-weight: 800;
+        font-size: 1.6rem;
+        font-weight: 700;
         line-height: 1.2;
+        letter-spacing: -0.02em;
     }
 
     .metric-txt {
-        font-size: 0.75rem;
-        font-weight: 700;
+        font-size: 0.72rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
-        margin-top: 6px;
-        opacity: 0.75;
+        letter-spacing: 0.05em;
+        margin-top: 4px;
+        color: #71717A;
     }
 
-    /* Custom Color Text */
-    .txt-emerald { color: #10B981; }
-    .txt-rose { color: #EF4444; }
-    .txt-indigo { color: #6366F1; }
-    .txt-amber { color: #F59E0B; }
+    /* Muted Text Colors */
+    .txt-emerald { color: #2D6A4F; }
+    .txt-rose { color: #A63D40; }
+    .txt-indigo { color: #334155; }
+    .txt-amber { color: #B45309; }
 
-    /* Custom Form & Text Area Styling */
+    /* Form & Input Styling */
     .stTextArea textarea {
-        border-radius: 12px !important;
+        border-radius: 8px !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-size: 0.92rem !important;
-        padding: 14px 16px !important;
-        border: 1px solid rgba(128, 128, 128, 0.25) !important;
-        transition: all 0.2s ease !important;
+        font-size: 0.9rem !important;
+        padding: 12px 14px !important;
+        border: 1px solid #E4E4E7 !important;
+        background-color: #FFFFFF !important;
+        box-shadow: none !important;
     }
 
     .stTextArea textarea:focus {
-        border-color: #6366F1 !important;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+        border-color: #18181B !important;
+        box-shadow: none !important;
     }
 
-    /* Custom Buttons */
+    /* Minimalist Buttons */
     .stButton button, .stDownloadButton button {
-        border-radius: 10px !important;
+        border-radius: 8px !important;
         font-weight: 600 !important;
-        font-size: 0.9rem !important;
-        padding: 8px 20px !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        border: 1px solid rgba(128, 128, 128, 0.2) !important;
+        font-size: 0.88rem !important;
+        padding: 8px 18px !important;
+        border: 1px solid #D4D4D8 !important;
+        background: #FFFFFF !important;
+        color: #18181B !important;
+        box-shadow: none !important;
+        transition: all 0.15s ease !important;
     }
 
     .stButton button:hover, .stDownloadButton button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 16px -4px rgba(99, 102, 241, 0.3) !important;
+        background: #18181B !important;
+        color: #FFFFFF !important;
+        border-color: #18181B !important;
+        box-shadow: none !important;
+        transform: none !important;
     }
 
-    /* Tabs Styling */
+    /* Minimalist Tabs */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        border-bottom: 2px solid rgba(128, 128, 128, 0.15);
-        padding-bottom: 2px;
+        gap: 6px;
+        border-bottom: 1px solid #E4E4E7;
+        padding-bottom: 0px;
     }
 
     .stTabs [data-baseweb="tab"] {
-        border-radius: 8px 8px 0 0;
-        padding: 8px 18px;
+        border-radius: 6px 6px 0 0;
+        padding: 8px 16px;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
+        color: #71717A;
+    }
+
+    .stTabs [aria-selected="true"] {
+        color: #18181B !important;
+        border-bottom-color: #18181B !important;
     }
 
     /* Sidebar Footer Info */
     .sidebar-haki-box {
-        background: rgba(16, 185, 129, 0.08);
-        border: 1px solid rgba(16, 185, 129, 0.25);
-        border-radius: 12px;
-        padding: 14px 16px;
+        background: #F4F4F5;
+        border: 1px solid #E4E4E7;
+        border-radius: 8px;
+        padding: 12px 14px;
         margin-top: 20px;
     }
 
     .sidebar-haki-title {
-        font-size: 0.8rem;
+        font-size: 0.74rem;
         font-weight: 700;
-        color: #10B981;
+        color: #27272A;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 4px;
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
     }
 
     .sidebar-haki-text {
-        font-size: 0.78rem;
-        opacity: 0.85;
-        line-height: 1.4;
+        font-size: 0.76rem;
+        color: #52525B;
+        line-height: 1.45;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -222,19 +225,19 @@ def inject_custom_css():
 
 def render_hero_banner(title: str, subtitle: str, is_demo: bool = False):
     """
-    Renders a stunning modern hero banner with badges.
+    Renders an editorial minimalist hero banner without emojis.
     """
-    demo_badge = '<span class="badge-item badge-model">⚡ DEMO REAL-TIME</span>' if is_demo else '<span class="badge-item badge-model">🔬 PIPELINE SKRIPSI</span>'
+    demo_badge = '<span class="badge-item badge-model">Demo Real-Time</span>' if is_demo else '<span class="badge-item badge-model">Pipeline Skripsi</span>'
     
     st.markdown(f"""
     <div class="hero-banner">
         <div class="hero-title">{title}</div>
         <div class="hero-subtitle">{subtitle}</div>
         <div class="badge-container">
-            <span class="badge-item badge-haki">📜 HAKI No. 001265752</span>
-            <span class="badge-item badge-unnes">🎓 Universitas Negeri Semarang</span>
+            <span class="badge-item badge-haki">HAKI No. 001265752</span>
+            <span class="badge-item badge-unnes">Universitas Negeri Semarang</span>
             {demo_badge}
-            <span class="badge-item badge-model">🤖 MultinomialNB vs LinearSVC</span>
+            <span class="badge-item badge-model">MultinomialNB & LinearSVC</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -242,11 +245,11 @@ def render_hero_banner(title: str, subtitle: str, is_demo: bool = False):
 
 def render_sidebar_haki():
     """
-    Displays HAKI credentials cleanly in the sidebar.
+    Displays HAKI credentials cleanly in the sidebar without emojis.
     """
     st.sidebar.markdown("""
     <div class="sidebar-haki-box">
-        <div class="sidebar-haki-title">📜 Surat Pencatatan Ciptaan</div>
+        <div class="sidebar-haki-title">Surat Pencatatan Ciptaan</div>
         <div class="sidebar-haki-text">
             <b>No. HAKI:</b> 001265752<br>
             <b>EC:</b> EC002026079870<br>
@@ -259,12 +262,14 @@ def render_sidebar_haki():
 
 def apply_matplotlib_style():
     """
-    Sets clean modern styling for Matplotlib plots.
+    Sets clean minimalist styling for Matplotlib plots.
     """
     plt.rcParams['font.family'] = 'sans-serif'
     plt.rcParams['font.sans-serif'] = ['Plus Jakarta Sans', 'DejaVu Sans', 'Arial']
-    plt.rcParams['axes.edgecolor'] = '#CCCCCC'
+    plt.rcParams['axes.edgecolor'] = '#E4E4E7'
     plt.rcParams['axes.linewidth'] = 0.8
-    plt.rcParams['grid.color'] = '#EEEEEE'
-    plt.rcParams['grid.linestyle'] = '--'
-    plt.rcParams['grid.alpha'] = 0.7
+    plt.rcParams['axes.spines.top'] = False
+    plt.rcParams['axes.spines.right'] = False
+    plt.rcParams['grid.color'] = '#F4F4F5'
+    plt.rcParams['grid.linestyle'] = '-'
+    plt.rcParams['grid.alpha'] = 1.0

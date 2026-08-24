@@ -42,7 +42,6 @@ warnings.filterwarnings('ignore')
 st.set_page_config(
     page_title="Analisis Sentimen MBG - Pipeline Skripsi",
     layout="wide",
-    page_icon="🔬",
     initial_sidebar_state="expanded"
 )
 
@@ -75,13 +74,13 @@ def set_page(page_name):
 
 # Hero Banner Utama
 render_hero_banner(
-    title="🔬 Pipeline Penelitian Analisis Sentimen MBG",
+    title="Pipeline Penelitian Analisis Sentimen MBG",
     subtitle="Framework End-to-End ABSA: Preprocessing, Segmentasi Konjungsi, RoBERTa Auto-Labeling, Training Multi-Skenario, & Evaluasi Per Aspek",
     is_demo=False
 )
 
 # Sidebar Navigasi & Info HAKI
-st.sidebar.markdown("### 📌 Navigasi Tahapan Skripsi")
+st.sidebar.markdown("### Navigasi Tahapan Skripsi")
 menu = st.sidebar.radio("Pilih Modul Pipeline:", PAGES, key='current_page')
 st.sidebar.divider()
 render_sidebar_haki()
@@ -90,7 +89,7 @@ render_sidebar_haki()
 # TAB 1: UPLOAD DATA
 # ============================================================
 if menu == PAGES[0]:
-    st.header("📂 1. Management & Upload Dataset CSV")
+    st.header("1. Management & Upload Dataset CSV")
     st.markdown("Pilih jenis data yang ingin dimuat ke dalam memori aplikasi:")
 
     data_type = st.radio(
@@ -113,12 +112,12 @@ if menu == PAGES[0]:
             st.session_state['labeling_done'] = False
             st.session_state['df_neutral_handled'] = None
             st.session_state['neutral_action'] = None
-            st.success(f"✅ Data mentah berhasil dimuat: **{len(df):,}** baris.")
+            st.success(f"Data mentah berhasil dimuat: **{len(df):,}** baris.")
             st.dataframe(df.head(10), use_container_width=True)
-            st.button("Lanjut ke Preprocessing →", on_click=set_page, args=(PAGES[1],))
+            st.button("Lanjut ke Preprocessing", on_click=set_page, args=(PAGES[1],))
         elif data_type == "Data Hasil Preprocessing (Lewati ke Labeling)":
             if 'segment' not in df.columns:
-                st.error("❌ Kolom wajib 'segment' tidak ditemukan dalam CSV ini.")
+                st.error("Kolom wajib 'segment' tidak ditemukan dalam CSV ini.")
             else:
                 st.session_state['df_exploded'] = df
                 st.session_state['df_raw'] = None
@@ -126,15 +125,15 @@ if menu == PAGES[0]:
                 st.session_state['labeling_done'] = False
                 st.session_state['df_neutral_handled'] = None
                 st.session_state['neutral_action'] = None
-                st.success(f"✅ Data preprocessing dimuat: **{len(df):,}** segmen opini.")
+                st.success(f"Data preprocessing dimuat: **{len(df):,}** segmen opini.")
                 st.dataframe(df.head(10), use_container_width=True)
-                st.button("Lanjut ke Labeling →", on_click=set_page, args=(PAGES[2],))
+                st.button("Lanjut ke Labeling", on_click=set_page, args=(PAGES[2],))
         else:
             required_cols = ['segment', 'sentiment_label', 'aspect_list']
             missing_cols = [c for c in required_cols if c not in df.columns]
             
             if missing_cols:
-                st.error(f"❌ Kolom wajib tidak ditemukan: {', '.join(missing_cols)}.")
+                st.error(f"Kolom wajib tidak ditemukan: {', '.join(missing_cols)}.")
             else:
                 def parse_aspect(x):
                     if isinstance(x, str):
@@ -155,22 +154,22 @@ if menu == PAGES[0]:
                 st.session_state['df_neutral_handled'] = None
                 st.session_state['neutral_action'] = None
                 
-                st.success(f"✅ Data berlabel dimuat: **{len(df):,}** segmen. Siap divisualisasikan dan dimodelkan!")
+                st.success(f"Data berlabel dimuat: **{len(df):,}** segmen. Siap divisualisasikan dan dimodelkan.")
                 st.dataframe(df.head(10), use_container_width=True)
-                st.button("Lihat Visualisasi (Tab Labeling) →", on_click=set_page, args=(PAGES[2],))
+                st.button("Lihat Visualisasi (Tab Labeling)", on_click=set_page, args=(PAGES[2],))
 
 # ============================================================
 # TAB 2: PREPROCESSING & SEGMENTASI
 # ============================================================
 elif menu == PAGES[1]:
-    st.header("⚙️ 2. Preprocessing & Segmentasi Kalimat Konjungsi")
-    st.info("💡 **Inovasi Penelitian:** Kalimat majemuk yang mengandung kata hubung (konjungsi) dipecah menjadi beberapa segmen opini terpisah untuk meningkatkan akurasi ABSA.")
+    st.header("2. Preprocessing & Segmentasi Kalimat Konjungsi")
+    st.info("**Inovasi Penelitian:** Kalimat majemuk yang mengandung kata hubung (konjungsi) dipecah menjadi beberapa segmen opini terpisah untuk meningkatkan akurasi ABSA.")
 
     if st.session_state['df_raw'] is not None:
         df = st.session_state['df_raw'].copy()
         col_name = st.selectbox("Pilih kolom teks utama:", df.columns)
 
-        if st.button("🚀 Eksekusi Pipeline Preprocessing Lengkap"):
+        if st.button("Eksekusi Pipeline Preprocessing Lengkap"):
             with st.spinner("Jalankan Cleaning, Case Folding, Normalisasi Baku, Segmentasi, Stopword Removal & Stemming..."):
                 count_raw = len(df)
                 
@@ -225,7 +224,7 @@ elif menu == PAGES[1]:
         if st.session_state.get('preprocessing_done', False):
             stats = st.session_state.get('prep_stats', {})
             if stats:
-                st.success("🎉 Preprocessing Selesai!")
+                st.success("Preprocessing Selesai.")
                 
                 st.markdown(f"""
                 <div class="metric-grid-4">
@@ -242,20 +241,20 @@ elif menu == PAGES[1]:
 
             csv_data = st.session_state['df_exploded'].to_csv(index=False).encode('utf-8')
             st.download_button(
-                "📥 Download Hasil Preprocessing (CSV)",
+                "Download Hasil Preprocessing (CSV)",
                 data=csv_data,
                 file_name="hasil_preprocessing_mbg.csv",
                 mime="text/csv"
             )
-            st.button("Lanjut ke Labeling →", on_click=set_page, args=(PAGES[2],))
+            st.button("Lanjut ke Labeling", on_click=set_page, args=(PAGES[2],))
     else:
-        st.warning("⚠️ Upload data mentah terlebih dahulu di Tab 1.")
+        st.warning("Upload data mentah terlebih dahulu di Tab 1.")
 
 # ============================================================
 # TAB 3: LABELING & ASPEK
 # ============================================================
 elif menu == PAGES[2]:
-    st.header("🏷️ 3. Pelabelan Sentimen (RoBERTa) & Ekstraksi Aspek")
+    st.header("3. Pelabelan Sentimen (RoBERTa) & Ekstraksi Aspek")
 
     if st.session_state['df_exploded'] is not None:
         df = st.session_state['df_exploded']
@@ -267,12 +266,12 @@ elif menu == PAGES[2]:
         )
         
         if not st.session_state['labeling_done']:
-            if st.button("🚀 Jalankan Auto-Labeling (RoBERTa HF Hub)"):
+            if st.button("Jalankan Auto-Labeling (RoBERTa HF Hub)"):
                 with st.spinner("Memuat model Indonesian RoBERTa dari Hugging Face Hub..."):
                     classifier = load_roberta_pipeline()
                     
                 if classifier is None:
-                    st.error("❌ Gagal memuat model RoBERTa. Periksa koneksi internet.")
+                    st.error("Gagal memuat model RoBERTa. Periksa koneksi internet.")
                 else:
                     with st.spinner("Menentukan sentimen RoBERTa & mengekstraksi aspek (Kualitas, Layanan, Anggaran)..."):
                         total_rows = len(df)
@@ -302,9 +301,9 @@ elif menu == PAGES[2]:
                         st.rerun()
         else:
             df = st.session_state['df_exploded']
-            st.success("🎉 Auto-Labeling & Ekstraksi Aspek Selesai!")
+            st.success("Auto-Labeling & Ekstraksi Aspek Selesai.")
 
-            if st.button("🔄 Ulangi Pelabelan"):
+            if st.button("Ulangi Pelabelan"):
                 st.session_state['labeling_done'] = False
                 st.session_state['df_neutral_handled'] = None
                 st.session_state['neutral_action'] = None
@@ -318,8 +317,8 @@ elif menu == PAGES[2]:
                 fig, ax = plt.subplots(figsize=(4, 3.5))
                 fig.patch.set_alpha(0.0)
                 vals = df['sentiment_label'].value_counts()
-                colors_pie = ['#10B981' if l == 'Positif' else '#EF4444' for l in vals.index]
-                ax.pie(vals.values, labels=vals.index, autopct='%1.1f%%', colors=colors_pie, startangle=90, wedgeprops=dict(width=0.45, edgecolor='white'))
+                colors_pie = ['#2D6A4F' if l == 'Positif' else '#A63D40' for l in vals.index]
+                ax.pie(vals.values, labels=vals.index, autopct='%1.1f%%', colors=colors_pie, startangle=90, wedgeprops=dict(width=0.45, edgecolor='#E4E4E7'))
                 st.pyplot(fig)
                 plt.close(fig)
 
@@ -329,34 +328,34 @@ elif menu == PAGES[2]:
                 st.bar_chart(df_asp['aspect_list'].value_counts())
 
             with c3:
-                st.markdown("##### Quantitas per Kelas")
+                st.markdown("##### Kuantitas per Kelas")
                 st.bar_chart(df['sentiment_label'].value_counts())
 
             with st.expander("Contoh Data Berlabel & Aspek (10 Sampel)"):
                 st.dataframe(df[['segment', 'sentiment_label', 'aspect_list']].head(10), use_container_width=True)
 
             if st.session_state.get('df_neutral_handled') is not None and not st.session_state['df_neutral_handled'].empty:
-                st.info(f"ℹ️ Terdapat **{len(st.session_state['df_neutral_handled'])}** segmen netral yang telah ditangani ({st.session_state['neutral_action']}).")
+                st.info(f"Terdapat **{len(st.session_state['df_neutral_handled'])}** segmen netral yang telah ditangani ({st.session_state['neutral_action']}).")
 
             st.divider()
             csv_data_labeled = df.to_csv(index=False).encode('utf-8')
             st.download_button(
-                "📥 Download Data Berlabel (CSV)",
+                "Download Data Berlabel (CSV)",
                 data=csv_data_labeled,
                 file_name="hasil_pelabelan_dan_aspek_mbg.csv",
                 mime="text/csv"
             )
 
         if 'sentiment_label' in st.session_state['df_exploded'].columns:
-            st.button("Lanjut ke Modeling →", on_click=set_page, args=(PAGES[3],))
+            st.button("Lanjut ke Modeling", on_click=set_page, args=(PAGES[3],))
     else:
-        st.warning("⚠️ Lakukan Preprocessing terlebih dahulu.")
+        st.warning("Lakukan Preprocessing terlebih dahulu.")
 
 # ============================================================
 # TAB 4: MODELING (TRAINING)
 # ============================================================
 elif menu == PAGES[3]:
-    st.header("🤖 4. Pelatihan Model (MultinomialNB vs LinearSVC)")
+    st.header("4. Pelatihan Model (MultinomialNB vs LinearSVC)")
     st.markdown("Pelatihan 3 Skenario Split Data: **70:30**, **80:20**, dan **90:10** menggunakan fitur **TF-IDF Vectorizer**.")
 
     df_exp = st.session_state.get('df_exploded')
@@ -376,7 +375,7 @@ elif menu == PAGES[3]:
 
         df_model = df_exp.copy()
 
-        if st.button("🚀 Jalankan Training Model 3 Skenario"):
+        if st.button("Jalankan Training Model 3 Skenario"):
             with st.spinner("Mengeksekusi eksperimen pelatihan & evaluasi skenario split data..."):
                 X = df_model['segment']
                 y = df_model['sentiment_label']
@@ -445,15 +444,15 @@ elif menu == PAGES[3]:
                         'hasil_skenario': hasil_skenario
                     }
                     joblib.dump(saved_data, 'saved_model_data.joblib')
-                    st.success("🎉 Pelatihan Selesai! Model disimpan ke `saved_model_data.joblib`.")
+                    st.success("Pelatihan Selesai! Model disimpan ke `saved_model_data.joblib`.")
                 except Exception as e:
-                    st.success("Pelatihan Selesai!")
+                    st.success("Pelatihan Selesai.")
 
         if 'hasil_skenario' in st.session_state:
             st.divider()
-            st.subheader("📊 Matriks Evaluasi Global Per Skenario Split")
+            st.subheader("Matriks Evaluasi Global Per Skenario Split")
             
-            tab70, tab80, tab90 = st.tabs(["**Skenario 70:30**", "**Skenario 80:20 (Default)**", "**Skenario 90:10**"])
+            tab70, tab80, tab90 = st.tabs(["Skenario 70:30", "Skenario 80:20 (Default)", "Skenario 90:10"])
             tabs_dict = {"70:30": tab70, "80:20": tab80, "90:10": tab90}
             
             for split_name, tab in tabs_dict.items():
@@ -467,7 +466,7 @@ elif menu == PAGES[3]:
                     labels_cm = sorted(pd.concat([pd.Series(y_t), pd.Series(p_nb), pd.Series(p_svm)]).unique())
 
                     with col_eval1:
-                        st.markdown("##### 🔹 Multinomial Naïve Bayes")
+                        st.markdown("##### Multinomial Naïve Bayes")
                         metrics_nb = {
                             "Model": "Multinomial NB",
                             "Accuracy": accuracy_score(y_t, p_nb),
@@ -481,12 +480,12 @@ elif menu == PAGES[3]:
                         fig_nb, ax_nb = plt.subplots(figsize=(4.5, 3.5))
                         fig_nb.patch.set_alpha(0.0)
                         sns.heatmap(confusion_matrix(y_t, p_nb, labels=labels_cm), annot=True, fmt='d', cmap='Blues', xticklabels=labels_cm, yticklabels=labels_cm, ax=ax_nb)
-                        ax_nb.set_title(f"Confusion Matrix NB ({split_name})", fontsize=10, fontweight='bold')
+                        ax_nb.set_title(f"Confusion Matrix NB ({split_name})", fontsize=10, fontweight='bold', color='#18181B')
                         st.pyplot(fig_nb)
                         plt.close(fig_nb)
 
                     with col_eval2:
-                        st.markdown("##### 🔹 Linear Support Vector Classifier (LinearSVC)")
+                        st.markdown("##### Linear Support Vector Classifier (LinearSVC)")
                         metrics_svm = {
                             "Model": "LinearSVC",
                             "Accuracy": accuracy_score(y_t, p_svm),
@@ -500,20 +499,20 @@ elif menu == PAGES[3]:
                         fig_svm, ax_svm = plt.subplots(figsize=(4.5, 3.5))
                         fig_svm.patch.set_alpha(0.0)
                         sns.heatmap(confusion_matrix(y_t, p_svm, labels=labels_cm), annot=True, fmt='d', cmap='Greens', xticklabels=labels_cm, yticklabels=labels_cm, ax=ax_svm)
-                        ax_svm.set_title(f"Confusion Matrix LinearSVC ({split_name})", fontsize=10, fontweight='bold')
+                        ax_svm.set_title(f"Confusion Matrix LinearSVC ({split_name})", fontsize=10, fontweight='bold', color='#18181B')
                         st.pyplot(fig_svm)
                         plt.close(fig_svm)
 
-            st.button("Lanjut ke Evaluasi Per Aspek →", on_click=set_page, args=(PAGES[4],))
+            st.button("Lanjut ke Evaluasi Per Aspek", on_click=set_page, args=(PAGES[4],))
 
     else:
-        st.warning("⚠️ Lakukan Pelabelan di Tab 3 terlebih dahulu.")
+        st.warning("Lakukan Pelabelan di Tab 3 terlebih dahulu.")
 
 # ============================================================
 # TAB 5: EVALUASI DETAIL PER ASPEK
 # ============================================================
 elif menu == PAGES[4]:
-    st.header("📈 5. Evaluasi Detail Per Aspek Opini")
+    st.header("5. Evaluasi Detail Per Aspek Opini")
 
     if 'hasil_skenario' in st.session_state:
         skenario_options = list(st.session_state['hasil_skenario'].keys())
@@ -553,28 +552,30 @@ elif menu == PAGES[4]:
             fig_asp.patch.set_alpha(0.0)
             df_plot = df_asp_met.melt(id_vars=['Aspek'], value_vars=['Akurasi NB', 'Akurasi LinearSVC'],
                                      var_name='Model', value_name='Akurasi')
-            sns.barplot(data=df_plot, x='Aspek', y='Akurasi', hue='Model', palette='Set2', ax=ax_asp)
+            sns.barplot(data=df_plot, x='Aspek', y='Akurasi', hue='Model', palette=['#334155', '#2D6A4F'], ax=ax_asp)
             ax_asp.set_ylim(0, 1.1)
-            ax_asp.set_title(f"Akurasi NB vs LinearSVC Per Aspek ({selected_scenario})", fontweight='bold')
+            ax_asp.set_title(f"Akurasi NB vs LinearSVC Per Aspek ({selected_scenario})", fontweight='bold', color='#18181B')
+            ax_asp.spines['top'].set_visible(False)
+            ax_asp.spines['right'].set_visible(False)
             st.pyplot(fig_asp)
             plt.close(fig_asp)
 
-        st.button("Pengujian Real-Time →", on_click=set_page, args=(PAGES[5],))
+        st.button("Pengujian Real-Time", on_click=set_page, args=(PAGES[5],))
 
     else:
-        st.warning("⚠️ Latih model di Tab 4 terlebih dahulu.")
+        st.warning("Latih model di Tab 4 terlebih dahulu.")
 
 # ============================================================
 # TAB 6: PENGUJIAN REAL-TIME
 # ============================================================
 elif menu == PAGES[5]:
-    st.header("📝 6. Pengujian Model Real-Time")
+    st.header("6. Pengujian Model Real-Time")
 
     if 'model_nb' not in st.session_state or 'model_svm' not in st.session_state:
-        st.warning("⚠️ Latih model di Tab 4 terlebih dahulu.")
+        st.warning("Latih model di Tab 4 terlebih dahulu.")
     else:
         raw_text = st.text_area("Masukkan Kalimat Uji (Satu kalimat per baris):", height=150)
-        if st.button("🚀 Analisis Teks Real-Time"):
+        if st.button("Analisis Teks Real-Time"):
             lines = [l.strip() for l in raw_text.split('\n') if l.strip()]
             if lines:
                 df_res = analyze_texts(
