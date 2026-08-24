@@ -42,24 +42,6 @@ Program komputer ini telah terdaftar dan dilindungi secara hukum berdasarkan **S
 
 ---
 
-## 🖼️ Tampilan Antarmuka (Web App Preview)
-
-Berikut adalah antarmuka aplikasi pengujian real-time **`app_demo.py`** yang telah dirancang dengan desain modern, responsive metric cards, dan visualisasi interaktif:
-
-### 1. Dashboard Utama & Metrik Real-Time
-![Dashboard & Metrik Real-Time](docs/images/demo_preview_header.png)
-
-### 2. Detail Segmentasi Kalimat & Prediksi Sentimen-Aspek
-![Tabel Segmentasi & Prediksi](docs/images/demo_preview_table.png)
-
-### 3. Visualisasi Perbandingan Distribusi Sentimen & Aspek
-![Visualisasi Distribusi & Sentimen Per Aspek](docs/images/demo_preview_charts.png)
-
-### 4. Evaluasi Akurasi Pengujian Real-Time
-![Evaluasi Akurasi LinearSVC vs Naive Bayes](docs/images/demo_preview_eval.png)
-
----
-
 ## 📁 Struktur Direktori Repositori
 
 ```text
