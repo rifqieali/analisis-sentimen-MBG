@@ -1,5 +1,5 @@
 """
-Modul Desain UI & Estetika Minimalist (Clean Monochrome & Muted Pastels) untuk Streamlit
+Modul Desain UI & Estetika Industrial Brutalist (Swiss Print + Technical Research Terminal) untuk Streamlit
 """
 
 import streamlit as st
@@ -7,53 +7,81 @@ import matplotlib.pyplot as plt
 
 def inject_custom_css():
     """
-    Menyuntikkan CSS kustom dengan desain Minimalist UI:
-    warm monochrome palette, flat bento grids, muted pastels, tipografi editorial,
-    tanpa gradient warna-warni dan tanpa drop shadow tebal.
+    Menyuntikkan CSS kustom Industrial Brutalist:
+    - Rigid geometric grids, sharp rectangular panels (0-2px border-radius)
+    - Swiss Grotesk (Space Grotesk) & Technical Monospace (JetBrains Mono)
+    - Dark tactical slate/charcoal (#0C0E14, #131722)
+    - Utilitarian high-contrast accents (Phosphor Green #00E676, Amber #FF9100, Cyber Cyan #00D2FF, Crimson #FF334B)
+    - Bracketed notation, technical data readouts, precision telemetry styling
     """
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #18181B;
+        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #E2E8F0;
     }
 
-    /* Main Container */
+    /* Main Viewport Container */
     .block-container {
-        padding-top: 1.75rem;
-        padding-bottom: 3rem;
-        max-width: 1200px;
+        padding-top: 1.5rem;
+        padding-bottom: 2.5rem;
+        max-width: 1280px;
     }
 
-    /* Minimalist Hero Banner */
+    /* Industrial Terminal Hero Banner */
     .hero-banner {
-        background: #FFFFFF;
-        border: 1px solid #E4E4E7;
-        border-radius: 12px;
-        padding: 28px 32px;
-        margin-bottom: 24px;
-        box-shadow: none;
+        background: #11141E;
+        border: 1px solid #262B38;
+        border-top: 2px solid #00E676;
+        border-radius: 2px;
+        padding: 24px 28px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .hero-sys-tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: #00E676;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .hero-sys-tag::before {
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        background: #00E676;
     }
 
     .hero-title {
-        font-size: 1.75rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.85rem;
         font-weight: 700;
-        color: #18181B !important;
+        color: #F8FAFC !important;
         letter-spacing: -0.03em;
         margin: 0 0 8px 0;
-        line-height: 1.25;
+        line-height: 1.2;
+        text-transform: uppercase;
     }
 
     .hero-subtitle {
-        font-size: 0.92rem;
-        color: #71717A;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.9rem;
+        color: #94A3B8;
         margin-bottom: 16px;
         line-height: 1.5;
     }
 
-    /* Minimalist Badges */
+    /* Technical Rectangular Badges */
     .badge-container {
         display: flex;
         flex-wrap: wrap;
@@ -63,161 +91,176 @@ def inject_custom_css():
     }
 
     .badge-item {
+        font-family: 'JetBrains Mono', monospace;
         display: inline-flex;
         align-items: center;
         padding: 4px 10px;
-        border-radius: 6px;
+        border-radius: 2px;
         font-size: 0.72rem;
         font-weight: 600;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
-        background: #F4F4F5;
-        color: #3F3F46;
-        border: 1px solid #E4E4E7;
+        background: #181D2A;
+        color: #CBD5E1;
+        border: 1px solid #2B3346;
     }
 
     .badge-haki {
-        background: #F0FDF4;
-        color: #166534;
-        border: 1px solid #DCFCE7;
+        background: #0E241B;
+        color: #00E676;
+        border: 1px solid #144933;
     }
 
     .badge-unnes {
-        background: #F8FAFC;
-        color: #334155;
-        border: 1px solid #E2E8F0;
+        background: #121E2C;
+        color: #00D2FF;
+        border: 1px solid #1C354D;
     }
 
     .badge-model {
-        background: #F4F4F5;
-        color: #18181B;
-        border: 1px solid #E4E4E7;
+        background: #241D12;
+        color: #FFB300;
+        border: 1px solid #4D3917;
     }
 
-    /* Flat Bento Grid */
+    /* Telemetry Bento Grid */
     .metric-grid-4 {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-        margin: 16px 0 24px 0;
+        gap: 10px;
+        margin: 16px 0 20px 0;
     }
 
     .metric-card-pro {
-        background: #FFFFFF;
-        border: 1px solid #E4E4E7;
-        border-radius: 10px;
+        background: #11141E;
+        border: 1px solid #262B38;
+        border-radius: 2px;
         padding: 16px 18px;
         text-align: left;
-        box-shadow: none;
+        position: relative;
         transition: border-color 0.15s ease;
     }
 
     .metric-card-pro:hover {
-        border-color: #A1A1AA;
+        border-color: #4B556D;
     }
 
     .metric-num {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 1.6rem;
-        font-weight: 700;
-        line-height: 1.2;
+        font-size: 1.65rem;
+        font-weight: 800;
+        line-height: 1.15;
         letter-spacing: -0.02em;
     }
 
     .metric-txt {
-        font-size: 0.72rem;
-        font-weight: 600;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 4px;
-        color: #71717A;
+        letter-spacing: 0.08em;
+        margin-top: 6px;
+        color: #94A3B8;
     }
 
-    /* Muted Text Colors */
-    .txt-emerald { color: #2D6A4F; }
-    .txt-rose { color: #A63D40; }
-    .txt-indigo { color: #334155; }
-    .txt-amber { color: #B45309; }
+    /* High-Contrast Technical Accents */
+    .txt-emerald { color: #00E676; }
+    .txt-rose { color: #FF334B; }
+    .txt-indigo { color: #00D2FF; }
+    .txt-amber { color: #FFB300; }
 
-    /* Form & Input Styling */
+    /* Inputs & Form Controls */
     .stTextArea textarea {
-        border-radius: 8px !important;
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-size: 0.9rem !important;
+        background-color: #0F121B !important;
+        border: 1px solid #262B38 !important;
+        border-radius: 2px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.88rem !important;
+        color: #F1F5F9 !important;
         padding: 12px 14px !important;
-        border: 1px solid #E4E4E7 !important;
-        background-color: #FFFFFF !important;
-        box-shadow: none !important;
     }
 
     .stTextArea textarea:focus {
-        border-color: #18181B !important;
+        border-color: #00E676 !important;
         box-shadow: none !important;
     }
 
-    /* Minimalist Buttons */
+    /* Utilitarian Action Buttons */
     .stButton button, .stDownloadButton button {
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        font-size: 0.88rem !important;
+        background: #181D2A !important;
+        color: #E2E8F0 !important;
+        border: 1px solid #333C4E !important;
+        border-radius: 2px !important;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-weight: 700 !important;
+        font-size: 0.82rem !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
         padding: 8px 18px !important;
-        border: 1px solid #D4D4D8 !important;
-        background: #FFFFFF !important;
-        color: #18181B !important;
-        box-shadow: none !important;
-        transition: all 0.15s ease !important;
+        transition: all 0.12s ease !important;
     }
 
     .stButton button:hover, .stDownloadButton button:hover {
-        background: #18181B !important;
-        color: #FFFFFF !important;
-        border-color: #18181B !important;
+        background: #00E676 !important;
+        color: #0C0E14 !important;
+        border-color: #00E676 !important;
         box-shadow: none !important;
         transform: none !important;
     }
 
-    /* Minimalist Tabs */
+    /* Technical Rigid Tabs */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
-        border-bottom: 1px solid #E4E4E7;
+        gap: 4px;
+        border-bottom: 1px solid #262B38;
         padding-bottom: 0px;
     }
 
     .stTabs [data-baseweb="tab"] {
-        border-radius: 6px 6px 0 0;
+        border-radius: 2px 2px 0 0;
         padding: 8px 16px;
-        font-weight: 600;
-        font-size: 0.88rem;
-        color: #71717A;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #64748B;
+        background: transparent;
     }
 
     .stTabs [aria-selected="true"] {
-        color: #18181B !important;
-        border-bottom-color: #18181B !important;
+        color: #00E676 !important;
+        border-bottom: 2px solid #00E676 !important;
+        background: #11141E !important;
     }
 
-    /* Sidebar Footer Info */
+    /* Technical Sidebar Spec Sheet */
     .sidebar-haki-box {
-        background: #F4F4F5;
-        border: 1px solid #E4E4E7;
-        border-radius: 8px;
+        background: #11141E;
+        border: 1px solid #262B38;
+        border-left: 3px solid #00E676;
+        border-radius: 2px;
         padding: 12px 14px;
-        margin-top: 20px;
+        margin-top: 18px;
+        font-family: 'JetBrains Mono', monospace;
     }
 
     .sidebar-haki-title {
-        font-size: 0.74rem;
-        font-weight: 700;
-        color: #27272A;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: #00E676;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
         margin-bottom: 6px;
     }
 
     .sidebar-haki-text {
-        font-size: 0.76rem;
-        color: #52525B;
+        font-size: 0.73rem;
+        color: #94A3B8;
         line-height: 1.45;
+    }
+
+    .sidebar-haki-text b {
+        color: #E2E8F0;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -225,19 +268,20 @@ def inject_custom_css():
 
 def render_hero_banner(title: str, subtitle: str, is_demo: bool = False):
     """
-    Renders an editorial minimalist hero banner without emojis.
+    Renders an Industrial Brutalist technical research terminal hero banner.
     """
-    demo_badge = '<span class="badge-item badge-model">Demo Real-Time</span>' if is_demo else '<span class="badge-item badge-model">Pipeline Skripsi</span>'
+    demo_badge = '<span class="badge-item badge-model">[MODE // REALTIME_INFERENCE]</span>' if is_demo else '<span class="badge-item badge-model">[MODE // RESEARCH_PIPELINE]</span>'
     
     st.markdown(f"""
     <div class="hero-banner">
+        <div class="hero-sys-tag">SYS.NLP // LAB.AI // ABSA.MBG // UNNES</div>
         <div class="hero-title">{title}</div>
         <div class="hero-subtitle">{subtitle}</div>
         <div class="badge-container">
-            <span class="badge-item badge-haki">HAKI No. 001265752</span>
-            <span class="badge-item badge-unnes">Universitas Negeri Semarang</span>
+            <span class="badge-item badge-haki">[HAKI // EC002026079870]</span>
+            <span class="badge-item badge-unnes">[INST // UNNES_SEMARANG]</span>
             {demo_badge}
-            <span class="badge-item badge-model">MultinomialNB & LinearSVC</span>
+            <span class="badge-item badge-model">[MODELS // MNB + LSVC]</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -245,16 +289,16 @@ def render_hero_banner(title: str, subtitle: str, is_demo: bool = False):
 
 def render_sidebar_haki():
     """
-    Displays HAKI credentials cleanly in the sidebar without emojis.
+    Displays HAKI credentials as an industrial technical specification manifest.
     """
     st.sidebar.markdown("""
     <div class="sidebar-haki-box">
-        <div class="sidebar-haki-title">Surat Pencatatan Ciptaan</div>
+        <div class="sidebar-haki-title">[SPEC // CERTIFICATE_MANIFEST]</div>
         <div class="sidebar-haki-text">
-            <b>No. HAKI:</b> 001265752<br>
-            <b>EC:</b> EC002026079870<br>
-            <b>Pencipta:</b> Rifqie Alimul Haq, Dr. Nur Iksan, S.T., M.Kom., Dr. Djuniadi, M.T.<br>
-            <b>Pemegang:</b> Universitas Negeri Semarang
+            <b>REG_NO :</b> 001265752<br>
+            <b>EC_CODE:</b> EC002026079870<br>
+            <b>AUTHORS:</b> R. Alimul Haq, Dr. N. Iksan, Dr. Djuniadi<br>
+            <b>HOLDER :</b> Universitas Negeri Semarang
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -262,14 +306,20 @@ def render_sidebar_haki():
 
 def apply_matplotlib_style():
     """
-    Sets clean minimalist styling for Matplotlib plots.
+    Sets high-precision technical dark styling for Matplotlib plots.
     """
     plt.rcParams['font.family'] = 'sans-serif'
-    plt.rcParams['font.sans-serif'] = ['Plus Jakarta Sans', 'DejaVu Sans', 'Arial']
-    plt.rcParams['axes.edgecolor'] = '#E4E4E7'
-    plt.rcParams['axes.linewidth'] = 0.8
+    plt.rcParams['font.sans-serif'] = ['Space Grotesk', 'DejaVu Sans', 'Arial']
+    plt.rcParams['text.color'] = '#E2E8F0'
+    plt.rcParams['axes.labelcolor'] = '#94A3B8'
+    plt.rcParams['xtick.color'] = '#94A3B8'
+    plt.rcParams['ytick.color'] = '#94A3B8'
+    plt.rcParams['axes.edgecolor'] = '#262B38'
+    plt.rcParams['axes.linewidth'] = 1.0
     plt.rcParams['axes.spines.top'] = False
     plt.rcParams['axes.spines.right'] = False
-    plt.rcParams['grid.color'] = '#F4F4F5'
-    plt.rcParams['grid.linestyle'] = '-'
-    plt.rcParams['grid.alpha'] = 1.0
+    plt.rcParams['grid.color'] = '#1A1F2C'
+    plt.rcParams['grid.linestyle'] = '--'
+    plt.rcParams['grid.alpha'] = 0.8
+    plt.rcParams['figure.facecolor'] = 'none'
+    plt.rcParams['axes.facecolor'] = 'none'

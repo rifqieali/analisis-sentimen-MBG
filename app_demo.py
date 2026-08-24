@@ -1,5 +1,5 @@
 """
-Aplikasi Pengujian Real-Time ABSA MBG (Demo Version)
+Aplikasi Pengujian Real-Time ABSA MBG (Demo Version) - Industrial Brutalist Interface
 Memuat model terlatih dari joblib (auto-download jika di-deploy di Streamlit Cloud).
 Jalankan: streamlit run app_demo.py
 """
@@ -18,7 +18,7 @@ from src.ui import inject_custom_css, render_hero_banner, render_sidebar_haki, a
 warnings.filterwarnings('ignore')
 
 st.set_page_config(
-    page_title="Analisis Sentimen MBG - Realtime Demo",
+    page_title="ABSA MBG // Realtime Inference Terminal",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -33,8 +33,8 @@ model_data = load_saved_model()
 
 # Header Hero Banner
 render_hero_banner(
-    title="Analisis Sentimen Program Makan Bergizi Gratis (MBG)",
-    subtitle="Pengujian Real-Time Aspect-Based Sentiment Analysis (ABSA) Menggunakan Machine Learning (Multinomial Naïve Bayes vs LinearSVC)",
+    title="Aspect-Based Sentiment Analysis (ABSA) // Program MBG",
+    subtitle="High-Precision Real-Time Opinion Mining & Machine Learning Benchmark (Multinomial Naïve Bayes vs LinearSVC)",
     is_demo=True
 )
 
@@ -42,7 +42,7 @@ render_hero_banner(
 render_sidebar_haki()
 
 if model_data is None:
-    st.error("Model Machine Learning belum dapat dimuat. Pastikan file `saved_model_data.joblib` tersedia atau rilis GitHub Release telah dibuat.")
+    st.error("[ERROR // MODEL_UNAVAILABLE] Model Machine Learning belum dapat dimuat. Pastikan file saved_model_data.joblib tersedia.")
     st.stop()
 
 nb_model = model_data['model_nb']
@@ -52,12 +52,12 @@ vec = model_data['vectorizer']
 vocab_size = len(vec.vocabulary_)
 classes = nb_model.classes_
 
-# Model Metadata Card
+# Telemetry Metadata Card
 st.markdown(f"""
-<div style="background: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 10px; padding: 14px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
-    <div><span style="color: #71717A; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Model Aktif</span><br><b style="font-size: 0.95rem; color: #18181B;">MultinomialNB & LinearSVC</b></div>
-    <div style="border-left: 1px solid #E4E4E7; padding-left: 20px;"><span style="color: #71717A; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">TF-IDF Vocabulary</span><br><b style="font-size: 0.95rem; color: #334155;">{vocab_size:,} Fitur</b></div>
-    <div style="border-left: 1px solid #E4E4E7; padding-left: 20px;"><span style="color: #71717A; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Kelas Prediksi</span><br><b style="font-size: 0.95rem; color: #2D6A4F;">{' · '.join(classes)}</b></div>
+<div style="background: #11141E; border: 1px solid #262B38; border-radius: 2px; padding: 14px 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
+    <div><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ ACTIVE_ARCHITECTURES ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #F1F5F9;">MultinomialNB & LinearSVC</b></div>
+    <div style="border-left: 1px solid #262B38; padding-left: 20px;"><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ TFIDF_VOCABULARY_SIZE ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #00D2FF;">{vocab_size:,} FEATURES</b></div>
+    <div style="border-left: 1px solid #262B38; padding-left: 20px;"><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ TARGET_CLASSES ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #00E676;">{' // '.join(classes).upper()}</b></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -73,25 +73,25 @@ for key, default in [
 
 if not st.session_state['rt_analyzed']:
     mode = st.radio(
-        "Pilih Mode Input Pengujian:",
-        ("Input Manual (Paste Teks)", "Upload File CSV"),
+        "[ INGESTION_MODE ] Pilih Metode Input Data:",
+        ("Manual Text Batch (Line-by-Line)", "Structured CSV Upload"),
         horizontal=True
     )
     st.markdown("<br>", unsafe_allow_html=True)
 
     if "Manual" in mode:
-        st.info("**Panduan Input:** Masukkan satu kalimat per baris. Untuk menguji akurasi otomatis, tambahkan label di akhir kalimat dengan separator `|` (contoh: `menu MBG sangat lezat dan bergizi | Positif`).")
+        st.info("**Panduan Input:** Masukkan 1 kalimat per baris. Untuk benchmark akurasi otomatis, sertakan label di akhir kalimat dengan pemisah `|` (contoh: `menu MBG sangat lezat dan bergizi | Positif`).")
 
         raw = st.text_area(
-            "Masukkan Kalimat Uji (Satu per Baris):",
-            height=200,
+            "INPUT_STREAM:",
+            height=190,
             placeholder="makanan bergizi enak dan porsinya cukup untuk anak sekolah | Positif\ndistribusi makanan sering telat siswa menunggu berjam-jam | Negatif\ndana MBG dikorupsi dan dimarkup oknum tidak bertanggung jawab | Negatif\nmenu MBG lezat dan higienis sangat membantu gizi siswa | Positif",
             label_visibility="collapsed"
         )
 
-        col_btn1, _ = st.columns([1, 3])
+        col_btn1, _ = st.columns([1.2, 2.8])
         with col_btn1:
-            run = st.button("Analisis Teks Real-Time", use_container_width=True)
+            run = st.button("EXECUTE REAL-TIME INFERENCE", use_container_width=True)
 
         if run:
             if raw.strip():
@@ -113,10 +113,10 @@ if not st.session_state['rt_analyzed']:
                 })
                 st.rerun()
             else:
-                st.warning("Teks pengujian tidak boleh kosong.")
+                st.warning("[WARNING] Input stream kosong. Masukkan teks pengujian.")
 
     else:
-        st.info("**Format File CSV:** Kolom wajib bernama `full_text`. Kolom opsional `label` (berisi 'Positif' atau 'Negatif') jika ingin menghitung evaluasi akurasi.")
+        st.info("**Format Skema CSV:** Kolom wajib `full_text`. Kolom opsional `label` ('Positif' / 'Negatif') untuk evaluasi metrik.")
 
         template_df = pd.DataFrame({
             "full_text": [
@@ -131,20 +131,20 @@ if not st.session_state['rt_analyzed']:
         col_dl, col_up = st.columns([1, 2])
         with col_dl:
             st.download_button(
-                "Download Template CSV",
+                "DOWNLOAD TEMPLATE CSV",
                 data=template_df.to_csv(index=False).encode('utf-8'),
                 file_name="template_pengujian_mbg.csv",
                 mime="text/csv",
                 use_container_width=True
             )
         with col_up:
-            uploaded_test = st.file_uploader("Upload CSV Pengujian:", type="csv", label_visibility="collapsed")
+            uploaded_test = st.file_uploader("UPLOAD_CSV_FILE:", type="csv", label_visibility="collapsed")
 
-        if st.button("Analisis Seluruh Dataset CSV", use_container_width=True):
+        if st.button("EXECUTE BATCH DATASET INFERENCE", use_container_width=True):
             if uploaded_test:
                 df_csv = pd.read_csv(uploaded_test)
                 if 'full_text' not in df_csv.columns:
-                    st.error("Kolom wajib 'full_text' tidak ditemukan dalam file CSV.")
+                    st.error("[SCHEMA_ERROR] Kolom wajib 'full_text' tidak ditemukan dalam file CSV.")
                 else:
                     texts = df_csv['full_text'].dropna().astype(str).tolist()
                     labels = df_csv['label'].tolist() if 'label' in df_csv.columns else [None]*len(texts)
@@ -155,12 +155,12 @@ if not st.session_state['rt_analyzed']:
                     })
                     st.rerun()
             else:
-                st.warning("Silakan unggah file CSV terlebih dahulu.")
+                st.warning("[WARNING] Unggah file CSV terlebih dahulu.")
 
 else:
     col_ulang, _ = st.columns([1.5, 4.5])
     with col_ulang:
-        if st.button("Reset / Ulangi Pengujian", use_container_width=True):
+        if st.button("RESET EXPERIMENT SESSION", use_container_width=True):
             st.session_state.update({
                 'rt_analyzed': False, 'rt_texts': [],
                 'rt_labels': [], 'rt_has_labels': False, 'df_results': None
@@ -172,7 +172,7 @@ else:
     has_labels = st.session_state['rt_has_labels']
 
     if st.session_state['df_results'] is None:
-        progress_bar = st.progress(0, text=f"Menganalisis {len(texts)} kalimat uji...")
+        progress_bar = st.progress(0, text=f"[INFERENCE_RUNNING] Analyzing {len(texts)} samples...")
         df_res = analyze_texts(texts, nb_model, svm_model, vec, norm_dict, final_stopwords, stemmer, progress_bar)
         progress_bar.empty()
         st.session_state['df_results'] = df_res
@@ -180,7 +180,7 @@ else:
         df_res = st.session_state['df_results']
 
     if df_res.empty:
-        st.warning("Tidak ada segmen opini valid yang terdeteksi.")
+        st.warning("[WARNING] Tidak ada segmen opini valid yang terdeteksi.")
         st.stop()
 
     total_seg = len(df_res)
@@ -190,81 +190,86 @@ else:
     neg_nb = (df_res['Prediksi NB'] == 'Negatif').sum()
     unique_texts = df_res['Teks Asli'].nunique()
 
-    # Metric Dashboard Grid
+    # Telemetry Bento Grid
     st.markdown(f"""
     <div class="metric-grid-4">
         <div class="metric-card-pro">
             <div class="metric-num txt-indigo">{unique_texts}</div>
-            <div class="metric-txt">Kalimat Diuji</div>
+            <div class="metric-txt">[ SAMPLES_EVALUATED ]</div>
         </div>
         <div class="metric-card-pro">
             <div class="metric-num txt-amber">{total_seg}</div>
-            <div class="metric-txt">Total Segmen Opini</div>
+            <div class="metric-txt">[ OPINION_SEGMENTS ]</div>
         </div>
         <div class="metric-card-pro">
             <div class="metric-num txt-emerald">{pos_svm}</div>
-            <div class="metric-txt">Positif (LinearSVC)</div>
+            <div class="metric-txt">[ POSITIVE_LSVC ]</div>
         </div>
         <div class="metric-card-pro">
             <div class="metric-num txt-rose">{neg_svm}</div>
-            <div class="metric-txt">Negatif (LinearSVC)</div>
+            <div class="metric-txt">[ NEGATIVE_LSVC ]</div>
         </div>
         <div class="metric-card-pro">
             <div class="metric-num txt-emerald">{pos_nb}</div>
-            <div class="metric-txt">Positif (Naive Bayes)</div>
+            <div class="metric-txt">[ POSITIVE_MNB ]</div>
         </div>
         <div class="metric-card-pro">
             <div class="metric-num txt-rose">{neg_nb}</div>
-            <div class="metric-txt">Negatif (Naive Bayes)</div>
+            <div class="metric-txt">[ NEGATIVE_MNB ]</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Tabs Hasil Analisis
-    tab_table, tab_charts, tab_eval = st.tabs(["Tabel Hasil Analisis", "Visualisasi & Distribusi", "Evaluasi Akurasi"])
+    # Technical Tabs
+    tab_table, tab_charts, tab_eval = st.tabs(["[ 01 // DATA_MATRIX ]", "[ 02 // VISUAL_TELEMETRY ]", "[ 03 // BENCHMARK_EVALUATION ]"])
 
     with tab_table:
-        st.subheader("Detail Segmentasi Kalimat & Prediksi Sentimen-Aspek")
+        st.subheader("Detail Segmentasi Konjungsi & Prediksi Sentimen-Aspek")
         st.dataframe(df_res, use_container_width=True, height=360)
 
     with tab_charts:
         c_chart1, c_chart2 = st.columns(2)
         with c_chart1:
-            st.markdown("##### Perbandingan Distribusi Sentimen")
+            st.markdown("##### [ TELEMETRY // SENTIMENT_DISTRIBUTION ]")
             fig_pie, axes = plt.subplots(1, 2, figsize=(8, 3.8))
             fig_pie.patch.set_alpha(0.0)
             
             for ax, col_pred, name in [(axes[0], 'Prediksi SVM', 'LinearSVC'), (axes[1], 'Prediksi NB', 'MultinomialNB')]:
                 counts = df_res[col_pred].value_counts()
-                colors = ['#2D6A4F' if l == 'Positif' else '#A63D40' for l in counts.index]
-                ax.pie(counts.values, labels=counts.index, autopct='%1.1f%%', colors=colors, startangle=90, wedgeprops=dict(width=0.45, edgecolor='#E4E4E7'))
-                ax.set_title(name, fontsize=11, fontweight='bold', color='#18181B')
+                colors = ['#00E676' if l == 'Positif' else '#FF334B' for l in counts.index]
+                ax.pie(counts.values, labels=counts.index, autopct='%1.1f%%', colors=colors, startangle=90, 
+                       textprops=dict(color='#E2E8F0', fontfamily='JetBrains Mono', fontsize=9),
+                       wedgeprops=dict(width=0.45, edgecolor='#11141E', linewidth=1.5))
+                ax.set_title(name, fontsize=11, fontweight='bold', color='#F1F5F9', fontfamily='JetBrains Mono')
             st.pyplot(fig_pie)
             plt.close(fig_pie)
 
         with c_chart2:
-            st.markdown("##### Distribusi Sentimen Per Aspek (LinearSVC)")
+            st.markdown("##### [ TELEMETRY // ASPECT_POLARITY_LSVC ]")
             df_asp = df_res[~df_res['Aspek'].str.contains('Lainnya', na=False)].copy()
             if not df_asp.empty:
                 pivot = df_asp.groupby(['Aspek', 'Prediksi SVM']).size().unstack(fill_value=0)
                 fig_bar, ax_bar = plt.subplots(figsize=(6, 3.8))
                 fig_bar.patch.set_alpha(0.0)
-                colors_bar = {'Positif': '#2D6A4F', 'Negatif': '#A63D40'}
-                pivot.plot(kind='bar', ax=ax_bar, color=[colors_bar.get(c, '#334155') for c in pivot.columns], width=0.55, edgecolor='none')
-                ax_bar.set_title("Sentimen per Aspek", fontweight='bold', fontsize=11, color='#18181B')
+                colors_bar = {'Positif': '#00E676', 'Negatif': '#FF334B'}
+                pivot.plot(kind='bar', ax=ax_bar, color=[colors_bar.get(c, '#00D2FF') for c in pivot.columns], width=0.55, edgecolor='none')
+                ax_bar.set_title("Sentimen per Aspek", fontweight='bold', fontsize=11, color='#F1F5F9', fontfamily='JetBrains Mono')
                 ax_bar.set_xlabel('')
-                ax_bar.set_ylabel('Jumlah Segmen')
+                ax_bar.set_ylabel('Jumlah Segmen', color='#94A3B8', fontfamily='JetBrains Mono')
                 ax_bar.spines['top'].set_visible(False)
                 ax_bar.spines['right'].set_visible(False)
-                plt.xticks(rotation=0)
+                ax_bar.spines['left'].set_color('#262B38')
+                ax_bar.spines['bottom'].set_color('#262B38')
+                plt.xticks(rotation=0, color='#E2E8F0', fontfamily='JetBrains Mono')
+                plt.yticks(color='#94A3B8', fontfamily='JetBrains Mono')
                 st.pyplot(fig_bar)
                 plt.close(fig_bar)
             else:
-                st.info("Belum ada segmen aspek spesifik terdeteksi.")
+                st.info("[INFO] Belum ada segmen aspek spesifik terdeteksi.")
 
     with tab_eval:
         if has_labels and any(l is not None for l in labels):
-            st.subheader("Evaluasi Akurasi Pengujian Real-Time")
+            st.subheader("Benchmark Akurasi & Error Analysis")
 
             eval_data = []
             for i, text in enumerate(texts):
@@ -278,8 +283,8 @@ else:
                     'Label Sebenarnya': labels[i],
                     'Prediksi LinearSVC': ps,
                     'Prediksi NaiveBayes': pn,
-                    'Status LinearSVC': 'Benar' if ps == labels[i] else 'Salah',
-                    'Status NaiveBayes': 'Benar' if pn == labels[i] else 'Salah',
+                    'Status LinearSVC': 'MATCH' if ps == labels[i] else 'MISMATCH',
+                    'Status NaiveBayes': 'MATCH' if pn == labels[i] else 'MISMATCH',
                 })
 
             if eval_data:
@@ -290,19 +295,19 @@ else:
                 f1_nb = f1_score(df_eval['Label Sebenarnya'], df_eval['Prediksi NaiveBayes'], average='weighted', zero_division=0)
 
                 m1, m2, m3, m4 = st.columns(4)
-                with m1: st.metric("Akurasi LinearSVC", f"{acc_svm:.1%}")
-                with m2: st.metric("Akurasi Multinomial NB", f"{acc_nb:.1%}")
-                with m3: st.metric("F1-Score LinearSVC", f"{f1_svm:.1%}")
-                with m4: st.metric("F1-Score Multinomial NB", f"{f1_nb:.1%}")
+                with m1: st.metric("ACCURACY (LSVC)", f"{acc_svm:.1%}")
+                with m2: st.metric("ACCURACY (MNB)", f"{acc_nb:.1%}")
+                with m3: st.metric("F1-SCORE (LSVC)", f"{f1_svm:.1%}")
+                with m4: st.metric("F1-SCORE (MNB)", f"{f1_nb:.1%}")
 
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.dataframe(df_eval, use_container_width=True)
         else:
-            st.info("**Tips:** Untuk melihat evaluasi akurasi otomatis, berikan label pada kalimat uji dengan format `kalimat | Positif` atau upload file CSV dengan kolom `label`.")
+            st.info("[INFO] Untuk melihat evaluasi akurasi otomatis, sertakan label pada kalimat uji dengan format `kalimat | Positif` atau upload file CSV dengan kolom `label`.")
 
     st.divider()
     st.download_button(
-        "Download Hasil Analisis Lengkap (CSV)",
+        "DOWNLOAD FULL CSV TELEMETRY",
         data=df_res.to_csv(index=False).encode('utf-8'),
         file_name="hasil_analisis_realtime_mbg.csv",
         mime="text/csv"
