@@ -1,5 +1,5 @@
 """
-Aplikasi Pengujian Real-Time ABSA MBG (Demo Version) - Industrial Brutalist Interface
+Aplikasi Pengujian Real-Time ABSA MBG (Demo Version) - Swiss Technical Print (Light Edition)
 Memuat model terlatih dari joblib (auto-download jika di-deploy di Streamlit Cloud).
 Jalankan: streamlit run app_demo.py
 """
@@ -52,12 +52,12 @@ vec = model_data['vectorizer']
 vocab_size = len(vec.vocabulary_)
 classes = nb_model.classes_
 
-# Telemetry Metadata Card
+# Telemetry Metadata Card (Light)
 st.markdown(f"""
-<div style="background: #11141E; border: 1px solid #262B38; border-radius: 2px; padding: 14px 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
-    <div><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ ACTIVE_ARCHITECTURES ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #F1F5F9;">MultinomialNB & LinearSVC</b></div>
-    <div style="border-left: 1px solid #262B38; padding-left: 20px;"><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ TFIDF_VOCABULARY_SIZE ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #00D2FF;">{vocab_size:,} FEATURES</b></div>
-    <div style="border-left: 1px solid #262B38; padding-left: 20px;"><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ TARGET_CLASSES ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #00E676;">{' // '.join(classes).upper()}</b></div>
+<div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 2px; padding: 14px 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
+    <div><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ ACTIVE_ARCHITECTURES ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #0F172A;">MultinomialNB & LinearSVC</b></div>
+    <div style="border-left: 1px solid #CBD5E1; padding-left: 20px;"><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ TFIDF_VOCABULARY_SIZE ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #0284C7;">{vocab_size:,} FEATURES</b></div>
+    <div style="border-left: 1px solid #CBD5E1; padding-left: 20px;"><span style="font-family: 'JetBrains Mono', monospace; color: #64748B; font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">[ TARGET_CLASSES ]</span><br><b style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #16A34A;">{' // '.join(classes).upper()}</b></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -190,7 +190,7 @@ else:
     neg_nb = (df_res['Prediksi NB'] == 'Negatif').sum()
     unique_texts = df_res['Teks Asli'].nunique()
 
-    # Telemetry Bento Grid
+    # Telemetry Bento Grid (Light)
     st.markdown(f"""
     <div class="metric-grid-4">
         <div class="metric-card-pro">
@@ -236,11 +236,11 @@ else:
             
             for ax, col_pred, name in [(axes[0], 'Prediksi SVM', 'LinearSVC'), (axes[1], 'Prediksi NB', 'MultinomialNB')]:
                 counts = df_res[col_pred].value_counts()
-                colors = ['#00E676' if l == 'Positif' else '#FF334B' for l in counts.index]
+                colors = ['#16A34A' if l == 'Positif' else '#DC2626' for l in counts.index]
                 ax.pie(counts.values, labels=counts.index, autopct='%1.1f%%', colors=colors, startangle=90, 
-                       textprops=dict(color='#E2E8F0', fontfamily='JetBrains Mono', fontsize=9),
-                       wedgeprops=dict(width=0.45, edgecolor='#11141E', linewidth=1.5))
-                ax.set_title(name, fontsize=11, fontweight='bold', color='#F1F5F9', fontfamily='JetBrains Mono')
+                       textprops=dict(color='#0F172A', fontfamily='JetBrains Mono', fontsize=9, fontweight='bold'),
+                       wedgeprops=dict(width=0.45, edgecolor='#FFFFFF', linewidth=1.5))
+                ax.set_title(name, fontsize=11, fontweight='bold', color='#0F172A', fontfamily='JetBrains Mono')
             st.pyplot(fig_pie)
             plt.close(fig_pie)
 
@@ -251,17 +251,17 @@ else:
                 pivot = df_asp.groupby(['Aspek', 'Prediksi SVM']).size().unstack(fill_value=0)
                 fig_bar, ax_bar = plt.subplots(figsize=(6, 3.8))
                 fig_bar.patch.set_alpha(0.0)
-                colors_bar = {'Positif': '#00E676', 'Negatif': '#FF334B'}
-                pivot.plot(kind='bar', ax=ax_bar, color=[colors_bar.get(c, '#00D2FF') for c in pivot.columns], width=0.55, edgecolor='none')
-                ax_bar.set_title("Sentimen per Aspek", fontweight='bold', fontsize=11, color='#F1F5F9', fontfamily='JetBrains Mono')
+                colors_bar = {'Positif': '#16A34A', 'Negatif': '#DC2626'}
+                pivot.plot(kind='bar', ax=ax_bar, color=[colors_bar.get(c, '#0284C7') for c in pivot.columns], width=0.55, edgecolor='none')
+                ax_bar.set_title("Sentimen per Aspek", fontweight='bold', fontsize=11, color='#0F172A', fontfamily='JetBrains Mono')
                 ax_bar.set_xlabel('')
-                ax_bar.set_ylabel('Jumlah Segmen', color='#94A3B8', fontfamily='JetBrains Mono')
+                ax_bar.set_ylabel('Jumlah Segmen', color='#475569', fontfamily='JetBrains Mono')
                 ax_bar.spines['top'].set_visible(False)
                 ax_bar.spines['right'].set_visible(False)
-                ax_bar.spines['left'].set_color('#262B38')
-                ax_bar.spines['bottom'].set_color('#262B38')
-                plt.xticks(rotation=0, color='#E2E8F0', fontfamily='JetBrains Mono')
-                plt.yticks(color='#94A3B8', fontfamily='JetBrains Mono')
+                ax_bar.spines['left'].set_color('#CBD5E1')
+                ax_bar.spines['bottom'].set_color('#CBD5E1')
+                plt.xticks(rotation=0, color='#0F172A', fontfamily='JetBrains Mono')
+                plt.yticks(color='#475569', fontfamily='JetBrains Mono')
                 st.pyplot(fig_bar)
                 plt.close(fig_bar)
             else:

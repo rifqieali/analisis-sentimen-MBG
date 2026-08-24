@@ -1,5 +1,5 @@
 """
-Aplikasi Pipeline Lengkap Analisis Sentimen Berbasis Aspek (ABSA) MBG - Industrial Brutalist Interface
+Aplikasi Pipeline Lengkap Analisis Sentimen Berbasis Aspek (ABSA) MBG - Swiss Technical Print (Light Edition)
 Menjalankan seluruh tahapan skripsi: Ingestion -> Preprocessing -> Labeling -> Training -> Evaluasi -> Real-Time
 Jalankan: streamlit run app_pipeline.py
 """
@@ -317,10 +317,10 @@ elif menu == PAGES[2]:
                 fig, ax = plt.subplots(figsize=(4, 3.5))
                 fig.patch.set_alpha(0.0)
                 vals = df['sentiment_label'].value_counts()
-                colors_pie = ['#00E676' if l == 'Positif' else '#FF334B' for l in vals.index]
+                colors_pie = ['#16A34A' if l == 'Positif' else '#DC2626' for l in vals.index]
                 ax.pie(vals.values, labels=vals.index, autopct='%1.1f%%', colors=colors_pie, startangle=90, 
-                       textprops=dict(color='#E2E8F0', fontfamily='JetBrains Mono', fontsize=9),
-                       wedgeprops=dict(width=0.45, edgecolor='#11141E', linewidth=1.5))
+                       textprops=dict(color='#0F172A', fontfamily='JetBrains Mono', fontsize=9, fontweight='bold'),
+                       wedgeprops=dict(width=0.45, edgecolor='#FFFFFF', linewidth=1.5))
                 st.pyplot(fig)
                 plt.close(fig)
 
@@ -483,7 +483,7 @@ elif menu == PAGES[3]:
                         fig_nb.patch.set_alpha(0.0)
                         sns.heatmap(confusion_matrix(y_t, p_nb, labels=labels_cm), annot=True, fmt='d', cmap='Blues', 
                                     xticklabels=labels_cm, yticklabels=labels_cm, ax=ax_nb)
-                        ax_nb.set_title(f"Confusion Matrix NB ({split_name})", fontsize=10, fontweight='bold', color='#F1F5F9', fontfamily='JetBrains Mono')
+                        ax_nb.set_title(f"Confusion Matrix NB ({split_name})", fontsize=10, fontweight='bold', color='#0F172A', fontfamily='JetBrains Mono')
                         st.pyplot(fig_nb)
                         plt.close(fig_nb)
 
@@ -503,7 +503,7 @@ elif menu == PAGES[3]:
                         fig_svm.patch.set_alpha(0.0)
                         sns.heatmap(confusion_matrix(y_t, p_svm, labels=labels_cm), annot=True, fmt='d', cmap='Greens', 
                                     xticklabels=labels_cm, yticklabels=labels_cm, ax=ax_svm)
-                        ax_svm.set_title(f"Confusion Matrix LinearSVC ({split_name})", fontsize=10, fontweight='bold', color='#F1F5F9', fontfamily='JetBrains Mono')
+                        ax_svm.set_title(f"Confusion Matrix LinearSVC ({split_name})", fontsize=10, fontweight='bold', color='#0F172A', fontfamily='JetBrains Mono')
                         st.pyplot(fig_svm)
                         plt.close(fig_svm)
 
@@ -556,15 +556,15 @@ elif menu == PAGES[4]:
             fig_asp.patch.set_alpha(0.0)
             df_plot = df_asp_met.melt(id_vars=['Aspek'], value_vars=['Akurasi NB', 'Akurasi LinearSVC'],
                                      var_name='Model', value_name='Akurasi')
-            sns.barplot(data=df_plot, x='Aspek', y='Akurasi', hue='Model', palette=['#00D2FF', '#00E676'], ax=ax_asp)
+            sns.barplot(data=df_plot, x='Aspek', y='Akurasi', hue='Model', palette=['#0284C7', '#16A34A'], ax=ax_asp)
             ax_asp.set_ylim(0, 1.1)
-            ax_asp.set_title(f"Akurasi NB vs LinearSVC Per Aspek ({selected_scenario})", fontweight='bold', color='#F1F5F9', fontfamily='JetBrains Mono')
+            ax_asp.set_title(f"Akurasi NB vs LinearSVC Per Aspek ({selected_scenario})", fontweight='bold', color='#0F172A', fontfamily='JetBrains Mono')
             ax_asp.spines['top'].set_visible(False)
             ax_asp.spines['right'].set_visible(False)
-            ax_asp.spines['left'].set_color('#262B38')
-            ax_asp.spines['bottom'].set_color('#262B38')
-            plt.xticks(color='#E2E8F0', fontfamily='JetBrains Mono')
-            plt.yticks(color='#94A3B8', fontfamily='JetBrains Mono')
+            ax_asp.spines['left'].set_color('#CBD5E1')
+            ax_asp.spines['bottom'].set_color('#CBD5E1')
+            plt.xticks(color='#0F172A', fontfamily='JetBrains Mono')
+            plt.yticks(color='#475569', fontfamily='JetBrains Mono')
             st.pyplot(fig_asp)
             plt.close(fig_asp)
 
