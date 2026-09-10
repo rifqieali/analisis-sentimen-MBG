@@ -1,325 +1,616 @@
 """
-Modul Desain UI & Estetika Swiss Technical Print / Industrial Brutalist (Light Theme Edition) untuk Streamlit
+Professional UI design system for ABSA MBG Streamlit apps.
+
+Design language: clean analytics terminal — soft neutral canvas, white
+elevated surfaces, single icon set (currentColor), restrained motion.
+
+Polish rules applied (see skill `better-ui`):
+- Concentric radius: outer 16px = inner 10px + 6px gap; small 8px = inner 6px + 2px.
+- Shadows for elevation, borders for structure/state only.
+- Interactive changes use CSS transitions (interruptible);
+  keyframes only for one-shot staged entrances (~100ms stagger).
+- Exits softer than enters: fixed 4px translateY, ease-out both ways.
+- Icon swaps cross-fade opacity/scale/blur: 0->1, 0.25->1, 4px->0px,
+  easing cubic-bezier(0.2, 0, 0, 1).
+- Press feedback is always scale(0.96); `.is-static` opts out.
+- Transitions name exact properties; high-frequency ones are <=150ms.
+- will-change only transform/opacity/filter, added sparingly.
+- Images get a 1px low-opacity outline (oklch, never tinted).
+- Icon stroke 1.5px beside regular text, 2px beside semibold.
 """
 
 import streamlit as st
 import matplotlib.pyplot as plt
 
+
+# ---------------------------------------------------------------------------
+# Shared palette (single source of truth for CSS + matplotlib)
+# ---------------------------------------------------------------------------
+POSITIVE = "#059669"
+NEGATIVE = "#DC2626"
+INFO = "#0284C7"
+WARNING = "#D97706"
+INK = "#0F172A"
+MUTED = "#475569"
+FAINT = "#64748B"
+BORDER = "#E2E8F0"
+
+EASE = "cubic-bezier(0.2, 0, 0, 1)"  # exact — do not approximate
+
+
 def inject_custom_css():
-    """
-    Menyuntikkan CSS kustom Swiss Technical Print / Light Industrial:
-    - High-contrast crisp typography (Space Grotesk & JetBrains Mono)
-    - Clean white/off-white background (#FFFFFF, #F8FAFC)
-    - Sharp technical 1px borders (#CBD5E1, #94A3B8)
-    - Deep readable obsidian text (#0F172A)
-    - Utilitarian high-contrast accents (Emerald #16A34A, Crimson #DC2626, Azure #0284C7, Amber #D97706)
-    """
-    st.markdown("""
+    """Inject the professional design system CSS."""
+    st.markdown(f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    html, body, [class*="css"] {
-        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #0F172A;
-    }
+    :root {{
+        --bg: #F8FAFC;
+        --surface: #FFFFFF;
+        --border: {BORDER};
+        --border-strong: #CBD5E1;
+        --ink: {INK};
+        --muted: {MUTED};
+        --faint: {FAINT};
+        --positive: {POSITIVE};
+        --negative: {NEGATIVE};
+        --info: {INFO};
+        --warning: {WARNING};
+        --r-lg: 16px;   /* outer surface */
+        --r-md: 10px;   /* inner block = 16 - 6 gap */
+        --r-sm: 8px;
+        --ease: {EASE};
+        --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.05);
+        --shadow-md: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+        --shadow-lg: 0 2px 4px rgb(15 23 42 / 0.05), 0 16px 40px -16px rgb(15 23 42 / 0.18);
+    }}
 
-    /* Main Viewport Container */
-    .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 2.5rem;
-        max-width: 1280px;
-    }
+    html, body, [class*="css"] {{
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: var(--ink);
+    }}
+    .stApp {{ background: var(--bg); }}
 
-    /* Swiss Print Terminal Hero Banner */
-    .hero-banner {
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        border-top: 3px solid #0F172A;
-        border-radius: 2px;
-        padding: 24px 28px;
-        margin-bottom: 20px;
+    .block-container {{
+        padding-top: 1.75rem;
+        padding-bottom: 3rem;
+        max-width: 1240px;
+    }}
+
+    /* Tabular numbers for every metric / table */
+    .metric-num, .kpi-value, .stMetric [data-testid="stMetricValue"],
+    .stDataFrame, .pro-table {{
+        font-variant-numeric: tabular-nums;
+    }}
+
+    /* ---------------- Hero ---------------- */
+    .hero-banner, .pro-hero {{
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);          /* outer 16 */
+        box-shadow: var(--shadow-md);
+        padding: 26px 28px 22px 28px;
+        margin-bottom: 18px;
         position: relative;
-    }
-
-    .hero-sys-tag {
+        overflow: hidden;
+    }}
+    .hero-banner::before, .pro-hero::before {{
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--info) 0%, #38BDF8 45%, var(--positive) 100%);
+        opacity: 0.9;
+    }}
+    .hero-sys-tag, .pro-eyebrow {{
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        color: #0284C7;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        color: var(--info);
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         gap: 8px;
-    }
-
-    .hero-sys-tag::before {
+    }}
+    .hero-sys-tag::before, .pro-eyebrow .dot {{
         content: '';
         display: inline-block;
         width: 7px;
         height: 7px;
-        background: #0284C7;
-    }
-
-    .hero-title {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.85rem;
+        border-radius: 50%;
+        background: var(--positive);
+        box-shadow: 0 0 0 3px rgb(5 150 105 / 0.15);
+    }}
+    /* Optical nudge: dot sits 1px high vs caps, so pull it down */
+    .hero-sys-tag::before {{ transform: translateY(1px); }}
+    .hero-title, .pro-hero-title {{
+        font-size: 1.7rem;
         font-weight: 700;
-        color: #0F172A !important;
-        letter-spacing: -0.03em;
-        margin: 0 0 8px 0;
+        color: var(--ink) !important;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px 0;
         line-height: 1.2;
-        text-transform: uppercase;
-    }
+    }}
+    .hero-subtitle, .pro-hero-sub {{
+        font-size: 0.93rem;
+        color: var(--muted);
+        line-height: 1.55;
+        max-width: 86ch;
+        margin-bottom: 4px;
+    }}
 
-    .hero-subtitle {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 0.92rem;
-        color: #475569;
-        margin-bottom: 16px;
-        line-height: 1.5;
-    }
-
-    /* Technical Rectangular Badges (Light) */
-    .badge-container {
+    /* ---------------- Badges / pills (single SVG-free dot, currentColor text) -- */
+    .badge-container, .pill-row {{
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
         align-items: center;
-        margin-top: 12px;
-    }
-
-    .badge-item {
+        margin-top: 14px;
+    }}
+    .badge-item, .pill {{
         font-family: 'JetBrains Mono', monospace;
         display: inline-flex;
         align-items: center;
-        padding: 4px 10px;
-        border-radius: 2px;
-        font-size: 0.72rem;
+        gap: 6px;
+        padding: 5px 11px;                 /* inner 6px radius + padding ≈ outer rhythm */
+        border-radius: 999px;
+        font-size: 0.7rem;
         font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        letter-spacing: 0.04em;
         background: #F1F5F9;
         color: #1E293B;
-        border: 1px solid #CBD5E1;
-    }
+        border: 1px solid var(--border);
+        transition-property: background-color, color, border-color;
+        transition-duration: 150ms;
+        transition-timing-function: var(--ease);
+    }}
+    .badge-haki, .pill--success {{ background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }}
+    .badge-unnes, .pill--info {{ background: #F0F9FF; color: #0369A1; border-color: #BAE6FD; }}
+    .badge-model, .pill--neutral {{ background: #FFF7ED; color: #9A3412; border-color: #FED7AA; }}
+    .pill--danger {{ background: #FEF2F2; color: #991B1B; border-color: #FECACA; }}
 
-    .badge-haki {
-        background: #ECFDF5;
-        color: #065F46;
-        border: 1px solid #A7F3D0;
-    }
+    /* ---------------- Cards & KPI grid (concentric radius) ---------------- */
+    .pro-card {{
+        background: var(--surface);
+        border: 1px solid var(--border);   /* structure */
+        border-radius: var(--r-lg);        /* outer 16 */
+        box-shadow: var(--shadow-sm);      /* elevation via shadow */
+        padding: 20px 22px;
+        margin-bottom: 16px;
+    }}
+    .pro-card--flat {{ box-shadow: none; }}
+    .pro-card h3, .pro-card h4 {{ letter-spacing: -0.01em; }}
 
-    .badge-unnes {
-        background: #F0F9FF;
-        color: #0369A1;
-        border: 1px solid #BAE6FD;
-    }
-
-    .badge-model {
-        background: #FEF3C7;
-        color: #92400E;
-        border: 1px solid #FDE68A;
-    }
-
-    /* Telemetry Bento Grid (Light) */
-    .metric-grid-4 {
+    .metric-grid-4, .kpi-grid {{
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 10px;
-        margin: 16px 0 20px 0;
-    }
-
-    .metric-card-pro {
-        background: #FFFFFF;
-        border: 1px solid #CBD5E1;
-        border-radius: 2px;
-        padding: 16px 18px;
-        text-align: left;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 12px;
+        margin: 14px 0 18px 0;
+    }}
+    .metric-card-pro, .kpi-card {{
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        box-shadow: var(--shadow-sm);
+        padding: 16px 18px 14px 18px;
         position: relative;
-        transition: border-color 0.15s ease;
-    }
-
-    .metric-card-pro:hover {
-        border-color: #64748B;
-    }
-
-    .metric-num {
+        overflow: hidden;
+        transition-property: transform, box-shadow, border-color;
+        transition-duration: 150ms;
+        transition-timing-function: var(--ease);
+        animation: kpi-enter 0.3s var(--ease) both;   /* one-shot staged entrance */
+    }}
+    /* Stagger infrequent entrances by ~100ms (enter only, never high-frequency) */
+    .metric-grid-4 > *:nth-child(2), .kpi-grid > *:nth-child(2) {{ animation-delay: 100ms; }}
+    .metric-grid-4 > *:nth-child(3), .kpi-grid > *:nth-child(3) {{ animation-delay: 200ms; }}
+    .metric-grid-4 > *:nth-child(4), .kpi-grid > *:nth-child(4) {{ animation-delay: 300ms; }}
+    .metric-grid-4 > *:nth-child(5), .kpi-grid > *:nth-child(5) {{ animation-delay: 400ms; }}
+    .metric-grid-4 > *:nth-child(6), .kpi-grid > *:nth-child(6) {{ animation-delay: 500ms; }}
+    @keyframes kpi-enter {{
+        from {{ opacity: 0; transform: translateY(6px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
+    }}
+    .metric-card-pro:hover, .kpi-card:hover {{
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--border-strong);
+    }}
+    .metric-card-pro::before, .kpi-card::before {{
+        content: '';
+        position: absolute;
+        left: 0; top: 14px; bottom: 14px;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: var(--accent-bar, var(--border-strong));
+    }}
+    .metric-num, .kpi-value {{
         font-family: 'JetBrains Mono', monospace;
-        font-size: 1.65rem;
-        font-weight: 800;
-        line-height: 1.15;
-        letter-spacing: -0.02em;
-    }
-
-    .metric-txt {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.7rem;
+        font-size: 1.7rem;
         font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+    }}
+    .metric-txt, .kpi-label {{
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.68rem;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         margin-top: 6px;
-        color: #64748B;
-    }
+        color: var(--faint);
+    }}
+    .kpi-hint {{ font-size: 0.78rem; color: var(--faint); margin-top: 2px; }}
+    .txt-emerald {{ color: var(--positive); }}
+    .txt-rose {{ color: var(--negative); }}
+    .txt-indigo {{ color: var(--info); }}
+    .txt-amber {{ color: var(--warning); }}
 
-    /* High-Contrast Technical Accents (Light) */
-    .txt-emerald { color: #16A34A; }
-    .txt-rose { color: #DC2626; }
-    .txt-indigo { color: #0284C7; }
-    .txt-amber { color: #D97706; }
+    /* Section header: eyebrow + title + description */
+    .section-head {{ margin: 6px 0 12px 0; }}
+    .section-eyebrow {{
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.68rem; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--faint); margin-bottom: 4px;
+    }}
+    .section-title {{ font-size: 1.15rem; font-weight: 700; letter-spacing: -0.015em; margin: 0; }}
+    .section-desc {{ font-size: 0.88rem; color: var(--muted); margin: 4px 0 0 0; line-height: 1.55; }}
 
-    /* Inputs & Form Controls */
-    .stTextArea textarea {
-        background-color: #FFFFFF !important;
-        border: 1px solid #CBD5E1 !important;
-        border-radius: 2px !important;
-        font-family: 'JetBrains Mono', monospace !important;
+    /* Stepper (pipeline progress) */
+    .stepper {{
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch;
+        margin: 4px 0 16px 0;
+    }}
+    .step {{
+        flex: 1 1 140px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);        /* inner 10 */
+        padding: 10px 12px;
+        display: flex; gap: 10px; align-items: flex-start;
+        transition-property: border-color, box-shadow;
+        transition-duration: 150ms;
+        transition-timing-function: var(--ease);
+    }}
+    .step .n {{
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem; font-weight: 700;
+        width: 24px; height: 24px; border-radius: 8px;   /* concentric: 10 outer - 2 gap */
+        display: inline-flex; align-items: center; justify-content: center;
+        background: #F1F5F9; color: var(--faint);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+    }}
+    .step.done .n {{ background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }}
+    .step.active {{ border-color: var(--ink); box-shadow: var(--shadow-sm); }}
+    .step.active .n {{ background: var(--ink); color: #fff; border-color: var(--ink); }}
+    .step .t {{ font-size: 0.8rem; font-weight: 600; line-height: 1.3; }}
+    .step .s {{ font-size: 0.72rem; color: var(--faint); }}
+
+    /* ---------------- Inputs & buttons ---------------- */
+    .stTextArea textarea, .stTextInput input {{
+        background-color: var(--surface) !important;
+        border: 1px solid var(--border-strong) !important;
+        border-radius: var(--r-md) !important;   /* inner 10 */
         font-size: 0.88rem !important;
-        color: #0F172A !important;
+        color: var(--ink) !important;
         padding: 12px 14px !important;
-    }
+        box-shadow: var(--shadow-sm);
+        transition-property: border-color, box-shadow;
+        transition-duration: 150ms;
+        transition-timing-function: var(--ease);
+    }}
+    .stTextArea textarea:focus, .stTextInput input:focus {{
+        border-color: var(--info) !important;
+        box-shadow: 0 0 0 3px rgb(2 132 199 / 0.15) !important;
+    }}
+    .stTextArea textarea {{ font-family: 'JetBrains Mono', monospace !important; line-height: 1.6 !important; }}
 
-    .stTextArea textarea:focus {
-        border-color: #0F172A !important;
-        box-shadow: none !important;
-    }
-
-    /* Utilitarian Action Buttons (Light) */
-    .stButton button, .stDownloadButton button {
-        background: #FFFFFF !important;
-        color: #0F172A !important;
-        border: 1px solid #94A3B8 !important;
-        border-radius: 2px !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-weight: 700 !important;
-        font-size: 0.82rem !important;
-        letter-spacing: 0.06em !important;
-        text-transform: uppercase !important;
-        padding: 8px 18px !important;
-        transition: all 0.12s ease !important;
-    }
-
-    .stButton button:hover, .stDownloadButton button:hover {
-        background: #0F172A !important;
+    .stButton button, .stDownloadButton button {{
+        border-radius: var(--r-md) !important;   /* inner 10 inside 16 cards */
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
+        letter-spacing: 0.01em !important;
+        text-transform: none !important;
+        padding: 10px 18px !important;
+        transition-property: transform, background-color, color, border-color, box-shadow;
+        transition-duration: 150ms;
+        transition-timing-function: var(--ease);
+        will-change: transform;
+    }}
+    /* Primary buttons: first in a row or kind=primary */
+    .stButton button[kind="primary"] {{
+        background: var(--ink) !important;
         color: #FFFFFF !important;
-        border-color: #0F172A !important;
-        box-shadow: none !important;
-        transform: none !important;
-    }
+        border: 1px solid var(--ink) !important;
+        box-shadow: var(--shadow-sm) !important;
+    }}
+    .stButton button[kind="primary"]:hover {{
+        background: #1E293B !important;
+        border-color: #1E293B !important;
+        box-shadow: var(--shadow-md) !important;
+    }}
+    .stButton button[kind="secondary"], .stDownloadButton button {{
+        background: var(--surface) !important;
+        color: var(--ink) !important;
+        border: 1px solid var(--border-strong) !important;
+    }}
+    .stButton button:hover, .stDownloadButton button:hover {{
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md) !important;
+    }}
+    .stButton button:active, .stDownloadButton button:active {{
+        transform: scale(0.96);   /* exact press feedback */
+    }}
+    .stButton button.is-static:active, .stDownloadButton button.is-static:active {{
+        transform: none;
+    }}
+    .stButton button:focus-visible, .stDownloadButton button:focus-visible,
+    a:focus-visible, input:focus-visible, textarea:focus-visible {{
+        outline: 2px solid var(--info) !important;
+        outline-offset: 2px !important;
+    }}
 
-    /* Technical Rigid Tabs (Light) */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 4px;
-        border-bottom: 1px solid #CBD5E1;
+    /* Radio / select polish */
+    .stRadio [role="radiogroup"] {{ gap: 8px; }}
+    .stRadio div[data-testid="stWidgetLabel"] p,
+    .stSelectbox div[data-testid="stWidgetLabel"] p {{
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem; font-weight: 600;
+        letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--faint);
+    }}
+
+    /* ---------------- Tabs ---------------- */
+    .stTabs [data-baseweb="tab-list"] {{
+        gap: 2px;
+        border-bottom: 1px solid var(--border);
         padding-bottom: 0px;
-    }
-
-    .stTabs [data-baseweb="tab"] {
-        border-radius: 2px 2px 0 0;
-        padding: 8px 16px;
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: 700;
-        font-size: 0.82rem;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: #64748B;
         background: transparent;
-    }
+    }}
+    .stTabs [data-baseweb="tab"] {{
+        border-radius: var(--r-sm) var(--r-sm) 0 0;
+        padding: 10px 16px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.83rem;
+        letter-spacing: 0.01em;
+        color: var(--faint);
+        background: transparent;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        transition-property: color, background-color;
+        transition-duration: 150ms;
+        transition-timing-function: var(--ease);
+    }}
+    .stTabs [data-baseweb="tab"]:hover {{ color: var(--ink); background: #F1F5F9; }}
+    .stTabs [aria-selected="true"] {{
+        color: var(--ink) !important;
+        border-bottom: 2px solid var(--ink) !important;
+        background: var(--surface) !important;
+    }}
 
-    .stTabs [aria-selected="true"] {
-        color: #0F172A !important;
-        border-bottom: 2px solid #0F172A !important;
-        background: #F8FAFC !important;
-    }
+    /* ---------------- Tables ---------------- */
+    .stDataFrame {{
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }}
 
-    /* Technical Sidebar Spec Sheet (Light) */
-    .sidebar-haki-box {
+    /* ---------------- Sidebar ---------------- */
+    section[data-testid="stSidebar"] {{ background: #FFFFFF; border-right: 1px solid var(--border); }}
+    .sidebar-haki-box {{
         background: #F8FAFC;
-        border: 1px solid #CBD5E1;
-        border-left: 3px solid #0F172A;
-        border-radius: 2px;
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
         padding: 12px 14px;
-        margin-top: 18px;
+        margin-top: 14px;
         font-family: 'JetBrains Mono', monospace;
-    }
+        box-shadow: var(--shadow-sm);
+    }}
+    .sidebar-haki-title {{
+        font-size: 0.68rem; font-weight: 700; color: var(--ink);
+        text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+    }}
+    .sidebar-haki-text {{ font-size: 0.73rem; color: var(--muted); line-height: 1.55; }}
+    .sidebar-haki-text b {{ color: var(--ink); font-weight: 600; }}
 
-    .sidebar-haki-title {
-        font-size: 0.72rem;
-        font-weight: 800;
-        color: #0F172A;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-bottom: 6px;
-    }
+    /* Sidebar icons: single weight per set, currentColor */
+    section[data-testid="stSidebar"] svg {{
+        stroke-width: 1.5px;
+        color: currentColor;
+    }}
+    section[data-testid="stSidebar"] strong svg,
+    section[data-testid="stSidebar"] [aria-selected="true"] svg {{
+        stroke-width: 2px;   /* 2px beside semibold */
+    }}
 
-    .sidebar-haki-text {
-        font-size: 0.73rem;
-        color: #475569;
-        line-height: 1.45;
-    }
+    /* ---------------- Alerts: static cue + motion (never motion alone) --- */
+    .stAlert {{
+        border-radius: var(--r-md) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: var(--shadow-sm);
+        font-size: 0.87rem;
+    }}
 
-    .sidebar-haki-text b {
-        color: #0F172A;
-    }
+    /* ---------------- Images: 1px low-opacity outline, never tinted -------- */
+    .stImage img {{
+        border-radius: var(--r-md);
+        outline: 1px solid oklch(0 0 0 / 0.1);
+        outline-offset: -1px;
+    }}
+    @media (prefers-color-scheme: dark) {{
+        .stImage img {{ outline-color: oklch(1 0 0 / 0.1); }}
+    }}
+
+    /* ---------------- Icon cross-fade helper (no dependency) --------------- */
+    .icon-swap {{ position: relative; display: inline-flex; width: 1.25em; height: 1.25em; }}
+    .icon-swap > * {{ position: absolute; inset: 0; }}
+    .icon-swap > *:last-child {{
+        opacity: 0; transform: scale(0.25); filter: blur(4px);
+        transition-property: opacity, transform, filter;
+        transition-duration: 0.3s;
+        transition-timing-function: var(--ease);
+    }}
+    .icon-swap.is-on > *:first-child {{
+        opacity: 0; transform: scale(0.25); filter: blur(4px);
+    }}
+    .icon-swap.is-on > *:last-child {{
+        opacity: 1; transform: scale(1); filter: blur(0px);
+    }}
+
+    /* Subtle exit helper: softer than enter, fixed 4px */
+    .exit-soft {{ transition-property: opacity, transform; transition-duration: 150ms; transition-timing-function: ease-out; }}
+    .exit-soft.is-leaving {{ opacity: 0; transform: translateY(4px); }}
+
+    /* Progress + spinner restraint (static label always present) */
+    .stProgress > div > div {{ background-color: var(--ink) !important; }}
+
+    @media (prefers-reduced-motion: reduce) {{
+        *, *::before, *::after {{
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }}
+    }}
     </style>
+
+    <script>
+    // Suppress transitions across a theme flip so the swap snaps instead of smearing.
+    (function() {{
+        function snapThemeSwap() {{
+            const css = '*,*::before,*::after{{transition:none !important}}';
+            const el = document.createElement('style');
+            el.textContent = css;
+            document.head.appendChild(el);
+            void document.body.offsetHeight;  /* force reflow */
+            requestAnimationFrame(() => requestAnimationFrame(() => el.remove()));
+        }}
+        const root = document.documentElement;
+        if (root && !root.__themeSnapHooked) {{
+            root.__themeSnapHooked = true;
+            new MutationObserver((m) => {{
+                for (const rec of m) {{
+                    if (rec.attributeName === 'class' || rec.attributeName === 'data-theme') snapThemeSwap();
+                }}
+            }}).observe(root, {{ attributes: true }});
+        }}
+    }})();
+    </script>
     """, unsafe_allow_html=True)
 
 
 def render_hero_banner(title: str, subtitle: str, is_demo: bool = False):
-    """
-    Renders a Swiss Print technical research terminal hero banner in Light Mode.
-    """
-    demo_badge = '<span class="badge-item badge-model">[MODE // REALTIME_INFERENCE]</span>' if is_demo else '<span class="badge-item badge-model">[MODE // RESEARCH_PIPELINE]</span>'
-    
+    """Professional hero: eyebrow + title + subtitle + status pills."""
+    mode = "Realtime Inference" if is_demo else "Research Pipeline"
     st.markdown(f"""
-    <div class="hero-banner">
-        <div class="hero-sys-tag">SYS.NLP // LAB.AI // ABSA.MBG // UNNES</div>
-        <div class="hero-title">{title}</div>
-        <div class="hero-subtitle">{subtitle}</div>
-        <div class="badge-container">
-            <span class="badge-item badge-haki">[HAKI // EC002026079870]</span>
-            <span class="badge-item badge-unnes">[INST // UNNES_SEMARANG]</span>
-            {demo_badge}
-            <span class="badge-item badge-model">[MODELS // MNB + LSVC]</span>
+    <div class="pro-hero hero-banner">
+        <div class="pro-eyebrow hero-sys-tag"><span class="dot"></span>ABSA &nbsp;·&nbsp; Program Makan Bergizi Gratis &nbsp;·&nbsp; UNNES</div>
+        <div class="pro-hero-title hero-title">{title}</div>
+        <div class="pro-hero-sub hero-subtitle">{subtitle}</div>
+        <div class="pill-row badge-container">
+            <span class="pill pill--success badge-item badge-haki">HAKI · EC002026079870</span>
+            <span class="pill pill--info badge-item badge-unnes">Universitas Negeri Semarang</span>
+            <span class="pill pill--neutral badge-item badge-model">{mode}</span>
+            <span class="pill pill--neutral badge-item">MNB + LinearSVC</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 
 def render_sidebar_haki():
-    """
-    Displays HAKI credentials as an industrial technical specification manifest in Light Mode.
-    """
+    """Certificate manifest card in the sidebar."""
     st.sidebar.markdown("""
     <div class="sidebar-haki-box">
-        <div class="sidebar-haki-title">[SPEC // CERTIFICATE_MANIFEST]</div>
+        <div class="sidebar-haki-title">Certificate manifest</div>
         <div class="sidebar-haki-text">
-            <b>REG_NO :</b> 001265752<br>
-            <b>EC_CODE:</b> EC002026079870<br>
-            <b>AUTHORS:</b> R. Alimul Haq, Dr. N. Iksan, Dr. Djuniadi<br>
-            <b>HOLDER :</b> Universitas Negeri Semarang
+            <b>Reg. no</b> &nbsp;001265752<br>
+            <b>EC code</b> &nbsp;EC002026079870<br>
+            <b>Authors</b> &nbsp;R. Alimul Haq · Dr. N. Iksan · Dr. Djuniadi<br>
+            <b>Holder</b> &nbsp;Universitas Negeri Semarang
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 
+def section_header(eyebrow: str, title: str, description: str = ""):
+    """Consistent section heading: mono eyebrow + strong title + muted lede."""
+    st.markdown(f"""
+    <div class="section-head">
+        <div class="section-eyebrow">{eyebrow}</div>
+        <div class="section-title">{title}</div>
+        {f'<div class="section-desc">{description}</div>' if description else ''}
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_stepper(steps: list, active: int):
+    """Horizontal stepper. `steps`: [(title, subtitle)]. `active`: index."""
+    cards = []
+    for i, (t, s) in enumerate(steps):
+        cls = "done" if i < active else ("active" if i == active else "")
+        mark = "✓" if i < active else str(i + 1)
+        cards.append(
+            f'<div class="step {cls}"><span class="n">{mark}</span>'
+            f'<span><span class="t">{t}</span><br><span class="s">{s}</span></span></div>'
+        )
+    st.markdown(f'<div class="stepper">{"".join(cards)}</div>', unsafe_allow_html=True)
+
+
+def kpi_card(value: str, label: str, hint: str = "", tone: str = "ink", accent: str = "") -> str:
+    """Single KPI card HTML. Tone: ink|green|red|blue|amber."""
+    tone_cls = {"ink": "", "green": "txt-emerald", "red": "txt-rose",
+                "blue": "txt-indigo", "amber": "txt-amber"}.get(tone, "")
+    bar = f' style="--accent-bar: {accent};"' if accent else ""
+    hint_html = f'<div class="kpi-hint">{hint}</div>' if hint else ""
+    return (
+        f'<div class="kpi-card metric-card-pro"{bar}>'
+        f'<div class="kpi-value metric-num {tone_cls}">{value}</div>'
+        f'<div class="kpi-label metric-txt">{label}</div>{hint_html}</div>'
+    )
+
+
+def render_kpi_grid(cards: list):
+    """Render a staggered KPI grid from pre-built `kpi_card` strings."""
+    st.markdown(f'<div class="kpi-grid metric-grid-4">{"".join(cards)}</div>',
+                unsafe_allow_html=True)
+
+
 def apply_matplotlib_style():
-    """
-    Sets high-contrast crisp light styling for Matplotlib plots.
-    """
-    plt.rcParams['font.family'] = 'sans-serif'
-    plt.rcParams['font.sans-serif'] = ['Space Grotesk', 'DejaVu Sans', 'Arial']
-    plt.rcParams['text.color'] = '#0F172A'
-    plt.rcParams['axes.labelcolor'] = '#334155'
-    plt.rcParams['xtick.color'] = '#334155'
-    plt.rcParams['ytick.color'] = '#334155'
-    plt.rcParams['axes.edgecolor'] = '#CBD5E1'
-    plt.rcParams['axes.linewidth'] = 1.0
-    plt.rcParams['axes.spines.top'] = False
-    plt.rcParams['axes.spines.right'] = False
-    plt.rcParams['grid.color'] = '#F1F5F9'
-    plt.rcParams['grid.linestyle'] = '--'
-    plt.rcParams['grid.alpha'] = 0.9
-    plt.rcParams['figure.facecolor'] = 'none'
-    plt.rcParams['axes.facecolor'] = 'none'
+    """Crisp, professional light styling for Matplotlib/Seaborn."""
+    plt.rcParams.update({
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Inter", "DejaVu Sans", "Arial"],
+        "text.color": INK,
+        "axes.labelcolor": MUTED,
+        "xtick.color": MUTED,
+        "ytick.color": MUTED,
+        "axes.edgecolor": BORDER,
+        "axes.linewidth": 1.0,
+        "axes.spines.top": False,
+        "axes.spines.right": False,
+        "grid.color": "#EEF2F7",
+        "grid.linestyle": "--",
+        "grid.alpha": 1.0,
+        "figure.facecolor": "none",
+        "axes.facecolor": "none",
+        "axes.titleweight": "bold",
+        "axes.titlesize": 11,
+    })
+
+
+# Re-export canonical palette for charts so apps stay consistent.
+PALETTE = {
+    "positive": POSITIVE,
+    "negative": NEGATIVE,
+    "info": INFO,
+    "warning": WARNING,
+    "ink": INK,
+    "muted": MUTED,
+    "faint": FAINT,
+    "border": BORDER,
+}
